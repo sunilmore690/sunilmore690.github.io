@@ -1,0 +1,70 @@
+body {
+  font-family: 'Cardo', serif;
+}
+.d-flex {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+article {
+  display: flex;
+}
+header {
+  margin-bottom: 30px;
+}
+#md-resume-header .d-flex-child {
+  width: 33.333%;
+  margin: 0 0 10px;
+}
+.md-website-link {
+  font-size: 14px;
+}
+.md-resume-section {
+  margin-bottom: 30px;
+}
+h3, h5 {
+  margin: 0;
+}
+h4 {
+  margin: 0 0 10px;
+}
+.md-employment {
+  margin-bottom: 30px;
+}
+p {
+  margin: 0 0 5px;
+}
+.md-employment-info p {
+  margin: 5px 0 10px;
+}
+#md-resume-leftcol {
+  padding-right: 30px;
+}
+ul {
+  padding-left: 20px;
+}
+.md-project {
+  margin-bottom: 30px;
+}
+.md-project-title {
+  margin-bottom: 10px;
+}
+.md-project-about,
+.md-project-domain,
+.md-project-responsibilites {
+  margin-bottom: 5px;
+}
+.md-project-link {
+  font-size: 14px;
+  margin-left: 10px;
+}
+.md-education {
+  margin-bottom: 20px;
+}
+.md-education-title {
+  margin-bottom: 10px;
+}
+.md-education-college,
+.md-education-grade {
+  margin-bottom: 5px;
+}

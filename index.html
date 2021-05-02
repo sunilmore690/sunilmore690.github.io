@@ -1,69 +1,340 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
   <head>
-    <title>Geolocation</title>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Cardo:400,400i,700" rel="stylesheet">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Resume - Sunil More</title>
   </head>
   <body>
-    <div id="map"></div>
-    <script>
-      // Note: This example requires that you consent to location sharing when
-      // prompted by your browser. If you see the error "The Geolocation service
-      // failed.", it means you probably did not give permission for the browser to
-      // locate you.
-      var map, infoWindow;
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -34.397, lng: 150.644},
-          zoom: 6
-        });
-        infoWindow = new google.maps.InfoWindow;
+    <div style="width: 768px; margin: 0 auto;">
+    <header id="md-resume-header">
+      <h1>Sunil More <a class="md-website-link" href="https://github.com/sunilmore690" target="_blank">https://github.com/sunilmore690</a></h1>
+      <div class="d-flex">
+        <p class="d-flex-child">
+            <i class="fas fa-envelope"></i> <a href="mailto:sunilmore690@gmail.com">sunilmore690@gmail.com</a>
+        </p>
+        <p class="d-flex-child">
+            <i class="fas fa-mobile"></i> <a href="tel:+919890990748">+91 9890990748</a>
+        </p>
+        <p class="d-flex-child">
+          <i class="fas fa-address-card"></i> Pune, IN, 411028
+        </p>
+        <p class="d-flex-child">
+          <i class="fab fa-skype"></i> sunilmore6490
+        </p>
+        <p class="d-flex-child">
+          <i class="fab fa-github"></i> <a href="https://github.com/sunilmore690" target="_blank">https://github.com/sunilmore690</a>
+        </p>
+        <p class="d-flex-child">
+          <i class="fab fa-medium"></i> <a href="https://medium.com/@sunilmore" target="_blank">https://medium.com/@sunilmore</a>
+        </p>
+      </div>
+    </header>
 
-        // Try HTML5 geolocation.
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
+<article>
+  <div id="md-resume-leftcol">
+    <section class="md-resume-section">
+      <h2 class="md-resume-section-heading">
+        <i class="fas fa-book-open"></i> Professional Summary
+      </h2>
+      <div class="md-resume-section-content">
+        <ul>
+            <li>7.5 years+ of working experience in Web development & deployment.</li>
+            <li>Expert in Javascript,ES6,Nodjes</li>
+            <li>Expertise in Client Side Technlogies React,Vuejs,BackboneJS </li>
+            <li>Experience in the developing REST API using Nodejs,Expressjs,Mongodb,Redis etc.</li>         
+            <li>Experience on HTML5,Bootstrap,elementUI etc</li>
+            <li>Experience in Web Application deployment </li>
+            <li>Worked with Client/Manager to understand requirements and implement in efficient way.</li>
+            <li>Passionate about building something new which can help most of the users</li>
+            <li>Experience in leading small teams and mentoring team members.</li>
+            <li>Passionate about learning new things related to Web and Implement something new </li>
+        </ul>
+      </div>
+    </section>
 
-            infoWindow.setPosition(pos);
-            infoWindow.setContent('Location found.');
-            infoWindow.open(map);
-            map.setCenter(pos);
-          }, function() {
-            handleLocationError(true, infoWindow, map.getCenter());
-          });
-        } else {
-          // Browser doesn't support Geolocation
-          handleLocationError(false, infoWindow, map.getCenter());
-        }
-      }
+    <section id="md-employment" class="md-resume-section">
+      <h2 class="md-resume-section-heading">
+        <i class="fas fa-suitcase"></i> Employment history
+      </h2>
+      <div class="md-resume-section-content">
+        <section class="md-employment">
+          <h3 class="md-employment-comapny-name">Technical Lead at Synechron(Client:HSBC).</h3>
+          <div class="md-employment-info d-flex">
+            <p>Pune, MH, India</p>
+            <p>Jan 2020 – Present</p>
+          </div>
+          <div>
+            <h5>Roles and responsibilities</h5>
+            <ul>
+              <li>Business requirement understanding, implementations & end-to-end
+              delivery of project Kestrel</li>
+              <li>Responsible for providing rich UI portal for client</li>
+              <li>Resposible for taking total ownership of any module from start to end</li>
+              <li>Resposible for converting  monolith react App to micro frontend</li>
+              <li>Responsible for Application Deloyment CI/CD using jenkins</li>
+              <li>Educate team whenever necessary on new technologies, tools. </li>
+            </ul>
+          </div>
+        </section>
+        <section class="md-employment">
+          <h3 class="md-employment-comapny-name">Senior Software Developer, SQr Infotech Pvt. Ltd.</h3>
+          <div class="md-employment-info d-flex">
+            <p>Pune, MH, India</p>
+            <p>Apr 2015 – Jan 2020</p>
+          </div>
+          <div>
+            <h5>Roles and responsibilities</h5>
+            <ul>
+              <li>Business requirement understanding, implementations & end-to-end
+              delivery of multiple projects.</li>
+              <li>Work on Nodejs,Mongodb,Redis to create REST API and standalone Processes.</li>
+              <li>Responsible for Designing Schema for multiple Projects</li>
+              <li>Migration of all project to support Docker </li>
+              <li>Web Application deployment using Docker,EC2,ELASTIC BEAN STALK</li>
+              <li>Worked on Web Analytics Platform Segment,Google Analytics</li>
+              <li>Worked on Web Analtyics Project</li>
+              <li>Recommended and implemented performance improvements.</li>
+              <li>Responsible for Application Deloyment CI/CD using jenkins</li>
+              <li>Educate team whenever necessary on new technologies, tools. </li>
+            </ul>
+          </div>
+        </section>
 
-      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-        infoWindow.setPosition(pos);
-        infoWindow.setContent(browserHasGeolocation ?
-                              'Error: The Geolocation service failed.' :
-                              'Error: Your browser doesn\'t support geolocation.');
-        infoWindow.open(map);
-      }
-    </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwvjQMLLVl5bQdLNS-slmsHgK85N3M0xU&callback=initMap">
-    </script>
+        <section class="md-employment">
+          <h3 class="md-employment-comapny-name">Product Developer, Giant Leap Systems Pvt. Ltd.</h3>
+          <div class="md-employment-info d-flex">
+            <p>Pune, MH, India</p>
+            <p>Dec. 2013 – March. 2015</p>
+          </div>
+          <div>
+            <h5>Roles and responsibilities</h5>
+            <ul>
+              <li>Requirement Understanding & implement it</li>
+              <li>Responsible for Creating REST API using Nodejs,Expressjs,Mongodb etc.</li>
+              <li>Responsible for Creating Model Schema </li>
+              <li>Responsible for Web Application Deployment </li>
+            </ul>
+          </div>
+        </section>
+
+        
+      </div>
+    </section>
+
+    <section id="md-accomplishments" class="md-resume-section">
+      <h2 class="md-resume-section-heading">
+        <i class="fas fa-trophy"></i> Personal Projects
+      </h2>
+      <div class="md-resume-section-content">
+        <h3>Library Published</h3>
+        <ul>
+          <li><a href='https://www.npmjs.com/package/restex' target='_blank'>restex</a> <br>
+            restex is simple wrapper on top of ExpressJS to create REST API using mongodb</li>
+          <li><a href='https://www.npmjs.com/package/ftpcp' target='_blank'>ftpcp</a><br>
+             ftcp is CLI utility to copy files from one FTP/SFTP to another FTP/SFTP server - NodeJs
+          <li><a href='https://www.npmjs.com/package/ftp-management-queue' target='_blank'>ftp-management-queue</a> <br>
+             File Queue Management for Multipe FTP/SFTP server using <a href='https://github.com/Automattic/kue' target='_blank'>Kue</a></li>
+          <li><a href='https://www.npmjs.com/package/kue-dashboard-express' target='_blank'>kue-dashboard-express</a> <br>
+             Rich User interface for <a href='https://github.com/Automattic/kue' target='_blank'>Kue</a> - VueJS</li>
+    
+          
+        </ul>
+      </div>
+      <div class="md-resume-section-content">
+          <h3>Projects</h3>
+          <ul>
+            <li><a href="https://stakenote.xyz" target="_blank">www.stakenote.xyz</a><br>
+              Stakenote is Online notepad on the web.It allows to you to store ,share note. And also you can manage privacy,reminder for notes.
+            </li>
+            <li><a href="https://tryjs.live" target="_blank">www.tryjs.live</a><br>
+                Online Patform to store and run javascript    
+               -  Nodejs,Vuejs,Mongodb
+            </li> 
+            <li><a href='https://github.com/sunilmore690/filezapp' target='_blank'>filezapp</a> <br>
+               Desktop FTP Client  built using Nodejs,Electronjs,Backbonejs. </li>
+            <li><a href='https://web-ftp-client.herokuapp.com/' target="_blank">web-ftp-client</a>) <br>
+               Web Ftp Client - Nodjes,Backbonejs, Expressjs  <a href='https://web-ftp-client.herokuapp.com/' target="_blank">Github</a></li>   
+          </ul>
+        </div>
+    </section>
+
+    <section id="md-projects" class="md-resume-section">
+      <h2 class="md-resume-section-heading">
+        <i class="fas fa-project-diagram"></i> Projects
+      </h2>
+      <div class="md-resume-section-content">
+        <section class="md-project">
+          <h3 class="md-project-title">#1 Kestrel (HSBC)<a class="md-project-link" href="https://sitenalysis.com/" target="_blank">View project</a> (Jan 2019 - Present)</h3>
+          <div class="md-project-domain">
+            <strong>Domain:</strong> Finance(Investment Bnking)
+          </div>
+          <div class="md-project-about">
+            <strong>About:</strong> Kestrel is portal view & manage all the phases included in Trade Lifecycle
+          </div>
+          <div class="md-project-responsibilites">
+            <strong>Responsibilites:</strong> - Responsible for creating rich and user friendly portal to manage things related to Investment Banking
+            andto create API to communicate with different microservices
+          </div>
+            <div class="md-project-responsibilites">
+            <strong>Technology:</strong>
+               Reactjs,SpringBoot,Oracle
+          </div>
+        </section>
+
+        <section class="md-project">
+          <h3 class="md-project-title">#2 Sitenalysis <a class="md-project-link" href="https://sitenalysis.com/" target="_blank">View project</a> (Jan 2019 - Present)</h3>
+          <div class="md-project-domain">
+            <strong>Domain:</strong> Bridal, Jewelry and Watch industry with ecommerce
+          </div>
+          <div class="md-project-about">
+            <strong>About:</strong> Omniconnect is a platform designed for brands with their retailers website insights.
+          </div>
+          <div class="md-project-responsibilites">
+            <strong>Responsibilites:</strong> Responsible for Creating REST API for web app.Responsible for run different proesses to add data to our system
+          </div>
+            <div class="md-project-responsibilites">
+            <strong>Technology:</strong>
+               Nodejs,Express,Mongodb,VueJS
+          </div>
+        </section>
+
+        <section class="md-project">
+          <h3 class="md-project-title">#3 HintAndWhisper <a class="md-project-link" href="https://hintandwhisper.com" target="_blank">View project</a> (Apr 2015 - July 2018)</h3>
+          <div class="md-project-domain">
+            <strong>Domain:</strong> Bridal, Jewelry and Watch industry with ecommerce
+          </div>
+          <div class="md-project-about">
+            <strong>About</strong>: Ecommerce platform for Bridal,Jewelry and Watches . he new way to find your dream ring (and other jewels!) Drop hints without saying a word.
+          </div>
+          <div class="md-project-responsibilites">
+            <strong>Responsibilites:</strong> Responsible for Creating REST API and standlaone Processes for this project.Responsible for Backend and frontend application deployment
+          </div>
+          <div class="md-project-responsibilites">
+            <strong>Technology:</strong>
+               Nodejs,Express,Mongodb,Backbonejs,Rendrjs
+          </div>
+        </section>
+        <section class="md-project">
+          <h3 class="md-project-title">#4 OPT <a class="md-project-link" href="https://consumer.optcentral.com/optconsumer/" target="_blank">View project</a>(Jan 2019 - Present)</h3>
+          <div class="md-project-domain">
+            <strong>Domain:</strong> Bridal, Jewelry and Watch industry with ecommerce
+          </div>
+          <div class="md-project-about">
+            <strong>About:</strong> Omnichannel Performance Technology (OPT) is the premier provider
+            of digital sales and marketing tools to discover sales opportunities, promote
+            brand visibility, strengthen sales support, and monitor performance in-store
+            and online. OPT provide services to over 1,600 stores.
+          </div>
+          <div class="md-project-responsibilites">
+            <strong>Responsibilites:</strong>
+              Responsible to write Standalone Module for OPT like Catalog Uploader
+          </div>
+          <div class="md-project-responsibilites">
+            <strong>Technology:</strong>
+               Nodejs,Express,Mongodb,Backbone
+          </div>
+        </section>
+        <section class="md-project">
+          <h3 class="md-project-title">#4 OrderZapp (Dec 2013 - Apr 2015)</h3>
+          <div class="md-project-domain">
+            <strong>Domain:</strong> Bridal, Jewelry and Watch industry with ecommerce
+          </div>
+          <div class="md-project-about">
+            <strong>About:</strong>E-commerce platform for Bakery Items
+          </div>
+          <div class="md-project-responsibilites">
+            <strong>Responsibilites:</strong>
+               Responsible for Creating REST API and standlaone Processes for this project and also Web Application Deployment.
+          </div>
+          <div class="md-project-responsibilites">
+            <strong>Technology:</strong>
+               Nodejs,Express,Mongodb,Redis
+          </div>
+        </section>
+
+
+        
+
+      </div>
+    </section>
+
+  </div>
+  <div id="md-resume-rightcol">
+
+      <section class="md-resume-section">
+        <h2 class="md-resume-section-heading">
+          <i class="fas fa-layer-group"></i> Skills
+        </h2>
+        <div class="md-resume-section-content">
+          <ul>
+            <li><b>Primary</b>
+              <ul>
+                <li>Javascript ES6</li>
+                <li>ReactJS</li>
+                <li>Vuejs</li>    
+                <li>NodeJS</li>
+                <li>ExpressJS</li>
+              </ul>
+            </li>
+            <li><b>Secondary</b>
+              <ul>
+                <li>Application Deployment</li>
+                <li>Backbonejs</li>
+                <li>Spring Boot</li>
+                <li>HTML</li>          
+                <li>Tools- Jenkins</li>
+              </ul>
+            </li>
+        
+          </ul>
+        </div>
+      </section>
+
+      <section class="md-resume-section">
+        <h2 class="md-resume-section-heading">
+          <i class="fas fa-graduation-cap"></i> Education
+        </h2>
+        <div class="md-resume-section-content">
+        
+          <section class="md-education">
+            <h4 class="md-education-title">Bachelor of Engineering in  Computer science, June 2011</h4>
+            <div class="md-education-college">University of Aurangabad, MH, India</div>
+          </section>
+          <section class="md-education">
+            <h4 class="md-education-title">2007</h4>
+            <div class="md-education-college">HSC board Latur, MH, India</div>
+          </section>
+        </div>
+      </section>
+
+      <section class="md-resume-section">
+        <h2 class="md-resume-section-heading">
+          <i class="fas fa-language"></i> Languages
+        </h2>
+        <div class="md-resume-section-content">
+          English, Hindi, Marathi
+        </div>
+      </section>
+
+      <section class="md-resume-section">
+        <h2 class="md-resume-section-heading">
+          <i class="fas fa-globe"></i> Interests
+        </h2>
+        <div class="md-resume-section-content">
+         Product design and architect,travelling,Watching Web Series,badminton
+        </div>
+      </section>
+
+  </div>
+
+</article>
+
+    </div><!-- ./container -->
+    <script defer src="https://use.fontawesome.com/releases/v5.8.2/js/all.js" integrity="sha384-DJ25uNYET2XCl5ZF++U8eNxPWqcKohUUBUpKGlNLMchM7q4Wjg2CUpjHLaL8yYPH" crossorigin="anonymous"></script>
   </body>
 </html>
