@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.js": "/cowin/static/js/main.bc60ce0b.chunk.js",
-    "main.js.map": "/cowin/static/js/main.bc60ce0b.chunk.js.map",
+    "main.js": "/cowin/static/js/main.611a099d.chunk.js",
+    "main.js.map": "/cowin/static/js/main.611a099d.chunk.js.map",
     "runtime-main.js": "/cowin/static/js/runtime-main.ee40cc9c.js",
     "runtime-main.js.map": "/cowin/static/js/runtime-main.ee40cc9c.js.map",
     "static/css/2.47c0b0d0.chunk.css": "/cowin/static/css/2.47c0b0d0.chunk.css",
-    "static/js/2.f36dc1cc.chunk.js": "/cowin/static/js/2.f36dc1cc.chunk.js",
-    "static/js/2.f36dc1cc.chunk.js.map": "/cowin/static/js/2.f36dc1cc.chunk.js.map",
+    "static/js/2.f40ba6ed.chunk.js": "/cowin/static/js/2.f40ba6ed.chunk.js",
+    "static/js/2.f40ba6ed.chunk.js.map": "/cowin/static/js/2.f40ba6ed.chunk.js.map",
     "index.html": "/cowin/index.html",
     "static/css/2.47c0b0d0.chunk.css.map": "/cowin/static/css/2.47c0b0d0.chunk.css.map",
-    "static/js/2.f36dc1cc.chunk.js.LICENSE.txt": "/cowin/static/js/2.f36dc1cc.chunk.js.LICENSE.txt",
+    "static/js/2.f40ba6ed.chunk.js.LICENSE.txt": "/cowin/static/js/2.f40ba6ed.chunk.js.LICENSE.txt",
     "static/media/bootstrap.min.css": "/cowin/static/media/glyphicons-halflings-regular.be810be3.woff2"
   },
   "entrypoints": [
     "static/js/runtime-main.ee40cc9c.js",
     "static/css/2.47c0b0d0.chunk.css",
-    "static/js/2.f36dc1cc.chunk.js",
-    "static/js/main.bc60ce0b.chunk.js"
+    "static/js/2.f40ba6ed.chunk.js",
+    "static/js/main.611a099d.chunk.js"
   ]
 }
