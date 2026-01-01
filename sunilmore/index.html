@@ -2,240 +2,248 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sunil More | Web Developer Portfolio</title>
-  <meta name="description"
-    content="Portfolio of Sunil More, an experienced Web Developer specializing in Javascript, Node.js, React, and more.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <!-- FontAwesome for Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunil More | Web Developer Portfolio</title>
+    <meta name="description"
+        content="Portfolio of Sunil More, an experienced Web Developer specializing in Javascript, Node.js, React, and more.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
-  <!-- Navigation -->
-  <nav class="navbar">
-    <div class="container nav-container">
-      <a href="#" class="nav-logo">Sunil More</a>
-      <div class="nav-links">
-        <a href="#about">About</a>
-        <a href="#skills">Skills</a>
-        <a href="#projects">Projects</a>
-        <a href="#blogs">Blogs</a>
-        <a href="#contact">Contact</a>
-        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
-          <i class="fas fa-moon"></i>
-        </button>
-      </div>
-    </div>
-  </nav>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="#" class="nav-logo">Sunil More</a>
+            <div class="nav-links">
+                <a href="#about">About</a>
+                <a href="#skills">Skills</a>
+                <a href="#projects">Projects</a>
+                <a href="#blogs">Blogs</a>
+                <a href="#contact">Contact</a>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
 
-  <script>
-    const toggleButton = document.getElementById('theme-toggle');
-    const icon = toggleButton.querySelector('i');
-    const html = document.documentElement;
+    <script>
+        const toggleButton = document.getElementById('theme-toggle');
+        const icon = toggleButton.querySelector('i');
+        const html = document.documentElement;
 
-    // Check for saved user preference, if any, on load
-    const currentTheme = localStorage.getItem('theme') || 'light';
-    if (currentTheme === 'dark') {
-      html.setAttribute('data-theme', 'dark');
-      icon.classList.remove('fa-moon');
-      icon.classList.add('fa-sun');
-    }
+        // Check for saved user preference, if any, on load
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') {
+            html.setAttribute('data-theme', 'dark');
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        }
 
-    toggleButton.addEventListener('click', () => {
-      const hasDarkTheme = html.getAttribute('data-theme') === 'dark';
+        toggleButton.addEventListener('click', () => {
+            const hasDarkTheme = html.getAttribute('data-theme') === 'dark';
 
-      if (hasDarkTheme) {
-        html.removeAttribute('data-theme');
-        localStorage.setItem('theme', 'light');
-        icon.classList.remove('fa-sun');
-        icon.classList.add('fa-moon');
-      } else {
-        html.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
-        icon.classList.remove('fa-moon');
-        icon.classList.add('fa-sun');
-      }
-    });
-  </script>
+            if (hasDarkTheme) {
+                html.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+        });
+    </script>
 
-  <!-- Hero Section -->
-  <header class="hero">
-    <div class="container hero-content">
-      <div class="hero-text">
-        <h1 class="hero-title">Building Scalable Web Applications</h1>
-        <p class="hero-subtitle">Experienced Web Developer with 9+ years in the industry. Specializing in Node.js,
-          React, and Cloud Architecture.</p>
-        <div class="hero-cta">
-          <a href="#projects" class="btn btn-primary">View My Work</a>
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Building Scalable Web Applications</h1>
+                <p class="hero-subtitle">Experienced Web Developer with 12 years in the industry. Specializing in
+                    Node.js,
+                    React, and Cloud Architecture.</p>
+                <div class="hero-cta">
+                    <a href="#projects" class="btn btn-primary">View My Work</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-img-wrapper">
+                    <img src="sunil_portfolio_image.png" alt="Sunil More">
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="hero-image">
-        <div class="hero-img-wrapper">
-          <img src="sunil_portfolio_image.png" alt="Sunil More">
-        </div>
-      </div>
-    </div>
-  </header>
+    </header>
 
-  <!-- About Section -->
-  <section id="about" class="section about">
-    <div class="container">
-      <h2 class="section-title">Professional Experience</h2>
-      <div class="experience-list">
-        <div class="experience-item">
-          <div class="exp-icon"><i class="fas fa-briefcase"></i></div>
-          <div class="exp-content">
-            <h3>12 Years Experience</h3>
-            <p>Working experience in Web Application development & deployment across various domains.</p>
-          </div>
+    <!-- About Section -->
+    <section id="about" class="section about">
+        <div class="container">
+            <h2 class="section-title">Professional Experience</h2>
+            <div class="experience-list">
+                <div class="experience-item">
+                    <div class="exp-icon"><i class="fas fa-briefcase"></i></div>
+                    <div class="exp-content">
+                        <h3>12 Years Experience</h3>
+                        <p>Working experience in Web Application development & deployment across various domains.</p>
+                    </div>
+                </div>
+                <div class="experience-item">
+                    <div class="exp-icon"><i class="fas fa-code"></i></div>
+                    <div class="exp-content">
+                        <h3>Full Stack Expertise</h3>
+                        <p>Deep understanding of Javascript, TypeScriptES6, Node.js, HTML, and CSS. Experienced with
+                            Frontend
+                            frameworks like
+                            React</p>
+                    </div>
+                </div>
+                <div class="experience-item">
+                    <div class="exp-icon"><i class="fas fa-server"></i></div>
+                    <div class="exp-content">
+                        <h3>Backend & Database</h3>
+                        <p>Specialized in developing REST APIs using Node.js (Express). Proficient with MongoDB ,
+                            PostGres and Redis
+                            databases.
+                        </p>
+                    </div>
+                </div>
+                <div class="experience-item">
+                    <div class="exp-icon"><i class="fas fa-cloud"></i></div>
+                    <div class="exp-content">
+                        <h3>DevOps & Cloud</h3>
+                        <p>Experience in Web Application deployment using Docker, Jenkins, and AWS. Worked on
+                            infrastructure
+                            automation using Ansible.</p>
+                    </div>
+                </div>
+                <div class="experience-item">
+                    <div class="exp-icon"><i class="fas fa-users"></i></div>
+                    <div class="exp-content">
+                        <h3>Leadership</h3>
+                        <p>Experience in leading small teams and mentoring team members. Passionate about learning new
+                            technologies.
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="experience-item">
-          <div class="exp-icon"><i class="fas fa-code"></i></div>
-          <div class="exp-content">
-            <h3>Full Stack Expertise</h3>
-            <p>Deep understanding of Javascript, TypeScriptES6, Node.js, HTML, and CSS. Experienced with Frontend
-              frameworks like
-              React</p>
-          </div>
-        </div>
-        <div class="experience-item">
-          <div class="exp-icon"><i class="fas fa-server"></i></div>
-          <div class="exp-content">
-            <h3>Backend & Database</h3>
-            <p>Specialized in developing REST APIs using Node.js (Express). Proficient with MongoDB , PostGres and Redis
-              databases.
-            </p>
-          </div>
-        </div>
-        <div class="experience-item">
-          <div class="exp-icon"><i class="fas fa-cloud"></i></div>
-          <div class="exp-content">
-            <h3>DevOps & Cloud</h3>
-            <p>Experience in Web Application deployment using Docker, Jenkins, and AWS. Worked on infrastructure
-              automation using Ansible.</p>
-          </div>
-        </div>
-        <div class="experience-item">
-          <div class="exp-icon"><i class="fas fa-users"></i></div>
-          <div class="exp-content">
-            <h3>Leadership</h3>
-            <p>Experience in leading small teams and mentoring team members. Passionate about learning new technologies.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Skills Section -->
-  <section id="skills" class="section skills">
-    <div class="container">
-      <div class="skills-grid">
-        <div class="skill-card">
-          <img src="assets/icons/javascript.svg" alt="JavaScript" class="skill-icon">
-          <div class="skill-name">JavaScript</div>
-          <div class="skill-years">10 Years</div>
+    <!-- Skills Section -->
+    <section id="skills" class="section skills">
+        <div class="container">
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <img src="assets/icons/javascript.svg" alt="JavaScript" class="skill-icon">
+                    <div class="skill-name">JavaScript</div>
+                    <div class="skill-years">10 Years</div>
+                </div>
+                <div class="skill-card">
+                    <img src="assets/icons/typescript.svg" alt="Typescript" class="skill-icon">
+                    <div class="skill-name">Typescript</div>
+                    <div class="skill-years">4 Years</div>
+                </div>
+                <div class="skill-card">
+                    <img src="assets/icons/nodejs.svg" alt="Node.js" class="skill-icon">
+                    <div class="skill-name">Node.js</div>
+                    <div class="skill-years">10 Years</div>
+                </div>
+                <div class="skill-card">
+                    <img src="assets/icons/express.svg" alt="Express" class="skill-icon">
+                    <div class="skill-name">Express JS</div>
+                    <div class="skill-years">10 Years</div>
+                </div>
+                <div class="skill-card">
+                    <img src="assets/icons/react.svg" alt="React" class="skill-icon">
+                    <div class="skill-name">React</div>
+                    <div class="skill-years">6 Years</div>
+                </div>
+                <div class="skill-card">
+                    <img src="assets/icons/vuejs.svg" alt="Vue.js" class="skill-icon">
+                    <div class="skill-name">Vue.js</div>
+                    <div class="skill-years">3 Years</div>
+                </div>
+                <div class="skill-card">
+                    <img src="assets/icons/linux.svg" alt="Linux" class="skill-icon">
+                    <div class="skill-name">Linux</div>
+                    <div class="skill-years">5 Years</div>
+                </div>
+                <div class="skill-card">
+                    <img src="assets/icons/aws.svg" alt="Cloud Computing" class="skill-icon">
+                    <div class="skill-name">Cloud Computing</div>
+                    <div class="skill-years">4 Years</div>
+                </div>
+                <div class="skill-card">
+                    <img src="assets/icons/mongodb.svg" alt="MongoDB" class="skill-icon">
+                    <div class="skill-name">MongoDB</div>
+                    <div class="skill-years">8 Years</div>
+                </div>
+                <div class="skill-card">
+                    <img src="assets/icons/postgresql.svg" alt="Postgres" class="skill-icon">
+                    <div class="skill-name">Postgres</div>
+                    <div class="skill-years">2 Years</div>
+                </div>
+            </div>
         </div>
-        <div class="skill-card">
-          <img src="assets/icons/typescript.svg" alt="Typescript" class="skill-icon">
-          <div class="skill-name">Typescript</div>
-          <div class="skill-years">4 Years</div>
-        </div>
-        <div class="skill-card">
-          <img src="assets/icons/nodejs.svg" alt="Node.js" class="skill-icon">
-          <div class="skill-name">Node.js</div>
-          <div class="skill-years">10 Years</div>
-        </div>
-        <div class="skill-card">
-          <img src="assets/icons/express.svg" alt="Express" class="skill-icon">
-          <div class="skill-name">Express JS</div>
-          <div class="skill-years">10 Years</div>
-        </div>
-        <div class="skill-card">
-          <img src="assets/icons/react.svg" alt="React" class="skill-icon">
-          <div class="skill-name">React</div>
-          <div class="skill-years">6 Years</div>
-        </div>
-        <div class="skill-card">
-          <img src="assets/icons/vuejs.svg" alt="Vue.js" class="skill-icon">
-          <div class="skill-name">Vue.js</div>
-          <div class="skill-years">3 Years</div>
-        </div>
-        <div class="skill-card">
-          <img src="assets/icons/linux.svg" alt="Linux" class="skill-icon">
-          <div class="skill-name">Linux</div>
-          <div class="skill-years">5 Years</div>
-        </div>
-        <div class="skill-card">
-          <img src="assets/icons/aws.svg" alt="Cloud Computing" class="skill-icon">
-          <div class="skill-name">Cloud Computing</div>
-          <div class="skill-years">4 Years</div>
-        </div>
-        <div class="skill-card">
-          <img src="assets/icons/mongodb.svg" alt="MongoDB" class="skill-icon">
-          <div class="skill-name">MongoDB</div>
-          <div class="skill-years">8 Years</div>
-        </div>
-        <div class="skill-card">
-          <img src="assets/icons/postgresql.svg" alt="Postgres" class="skill-icon">
-          <div class="skill-name">Postgres</div>
-          <div class="skill-years">2 Years</div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Projects Section -->
-  <section id="projects" class="section projects">
-    <div class="container">
-      <h2 class="section-title">Featured Projects</h2>
-      <div class="projects-grid">
-        <!-- Project 1 -->
-        <article class="project-card">
-          <img src="charzemycar-webiste.png" alt="Charzemycar" class="project-img">
-          <div class="project-content">
-            <h3 class="project-title">Charzemycar</h3>
-            <p class="project-desc">Your solution for finding convenient and reliable electric vehicle (EV) charging
-              stations. Provides real-time information for quick access.</p>
-            <a href="https://charzemycar.in" target="_blank" class="project-link">
-              View Project <i class="fas fa-arrow-right"></i>
-            </a>
-          </div>
-        </article>
+    <!-- Projects Section -->
+    <section id="projects" class="section projects">
+        <div class="container">
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="projects-grid">
+                <!-- Project 1 -->
+                <article class="project-card">
+                    <img src="charzemycar-webiste.png" alt="Charzemycar" class="project-img">
+                    <div class="project-content">
+                        <h3 class="project-title">Charzemycar</h3>
+                        <p class="project-desc">Your solution for finding convenient and reliable electric vehicle (EV)
+                            charging
+                            stations. Provides real-time information for quick access.</p>
+                        <a href="https://charzemycar.in" target="_blank" class="project-link">
+                            View Project <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
 
-        <!-- Project 2 -->
-        <article class="project-card">
-          <img src="takeanote-website.png" alt="Takeanote" class="project-img">
-          <div class="project-content">
-            <h3 class="project-title">Takeanote</h3>
-            <p class="project-desc">An online notepad on the web. Allows you to store and share notes, as well as manage
-              privacy and reminders.</p>
-            <a href="http://takeanote.in/" target="_blank" class="project-link">
-              View Project <i class="fas fa-arrow-right"></i>
-            </a>
-          </div>
-        </article>
+                <!-- Project 2 -->
+                <article class="project-card">
+                    <img src="takeanote-website.png" alt="Takeanote" class="project-img">
+                    <div class="project-content">
+                        <h3 class="project-title">Takeanote</h3>
+                        <p class="project-desc">An online notepad on the web. Allows you to store and share notes, as
+                            well as manage
+                            privacy and reminders.</p>
+                        <a href="http://takeanote.in/" target="_blank" class="project-link">
+                            View Project <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
 
-        <!-- Project 3 -->
-        <article class="project-card">
-          <img src="tryjsonloine.png" alt="tryjs.online" class="project-img">
-          <div class="project-content">
-            <h3 class="project-title">tryjs.online</h3>
-            <p class="project-desc">An online platform to store and run JavaScript - Nodejs, Vuejs, Mongodb playground.
-            </p>
-            <a href="https://tryjs.online/" target="_blank" class="project-link">
-              View Project <i class="fas fa-arrow-right"></i>
-            </a>
-          </div>
-        </article>
+                <!-- Project 3 -->
+                <article class="project-card">
+                    <img src="tryjsonloine.png" alt="tryjs.online" class="project-img">
+                    <div class="project-content">
+                        <h3 class="project-title">tryjs.online</h3>
+                        <p class="project-desc">An online platform to store and run JavaScript - Nodejs, Vuejs, Mongodb
+                            playground.
+                        </p>
+                        <a href="https://tryjs.online/" target="_blank" class="project-link">
+                            View Project <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
 
-        <!-- Project 4 -->
-        <!-- <article class="project-card">
+                <!-- Project 4 -->
+                <!-- <article class="project-card">
           <img src="webftp.png" alt="Web FTP Client" class="project-img">
           <div class="project-content">
             <h3 class="project-title">Web FTP Client</h3>
@@ -246,76 +254,78 @@
           </div>
         </article> -->
 
-        <!-- Project 5 -->
-        <article class="project-card">
-          <img src="web-note-app.png" alt="Note App" class="project-img">
-          <div class="project-content">
-            <h3 class="project-title">Note App</h3>
-            <p class="project-desc">Simple Note App to store your notes directly on your browser.</p>
-            <a href="https://notewapp.in" target="_blank" class="project-link">
-              View Project <i class="fas fa-arrow-right"></i>
-            </a>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
+                <!-- Project 5 -->
+                <article class="project-card">
+                    <img src="web-note-app.png" alt="Note App" class="project-img">
+                    <div class="project-content">
+                        <h3 class="project-title">Note App</h3>
+                        <p class="project-desc">Simple Note App to store your notes directly on your browser.</p>
+                        <a href="https://notewapp.in" target="_blank" class="project-link">
+                            View Project <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
 
-  <!-- Blogs Section -->
-  <section id="blogs" class="section blogs">
-    <div class="container">
-      <h2 class="section-title">Latest Articles</h2>
-      <div class="blog-grid">
-        <article class="blog-card">
-          <h3 class="blog-title">Deploy application using docker swarm on DigitalOcean</h3>
-          <p class="blog-preview">A complete guide to deploying applications using docker swarm...</p>
-          <a href="https://medium.com/@sunilmore/complete-steps-to-deploy-application-using-docker-swarm-on-digitalocean-840945019b86"
-            target="_blank" class="project-link">
-            Read on Medium <i class="fas fa-external-link-alt"></i>
-          </a>
-        </article>
-        <article class="blog-card">
-          <h3 class="blog-title">Deploy Docker project using Github Actions</h3>
-          <p class="blog-preview">Deploy Docker based project using github in 5 min with simple CI/CD integration...</p>
-          <a href="https://medium.com/@sunilmore/deploy-docker-based-project-using-github-in-5-min-with-simple-ci-cd-integration-6cd5a8430e83"
-            target="_blank" class="project-link">
-            Read on Medium <i class="fas fa-external-link-alt"></i>
-          </a>
-        </article>
-        <article class="blog-card">
-          <h3 class="blog-title">Deploy Nodejs App with MongoDB on AWS EC2</h3>
-          <p class="blog-preview">Complete Setup for Deploying Nodejs App with mongodb database on Amazon EC2...</p>
-          <a href="https://medium.com/@sunilmore/complete-setup-for-deploying-nodejs-app-with-mongodb-database-on-amazon-ec2-e6eeb3b47bc0"
-            target="_blank" class="project-link">
-            Read on Medium <i class="fas fa-external-link-alt"></i>
-          </a>
-        </article>
-      </div>
-    </div>
-  </section>
+    <!-- Blogs Section -->
+    <section id="blogs" class="section blogs">
+        <div class="container">
+            <h2 class="section-title">Latest Articles</h2>
+            <div class="blog-grid">
+                <article class="blog-card">
+                    <h3 class="blog-title">Deploy application using docker swarm on DigitalOcean</h3>
+                    <p class="blog-preview">A complete guide to deploying applications using docker swarm...</p>
+                    <a href="https://medium.com/@sunilmore/complete-steps-to-deploy-application-using-docker-swarm-on-digitalocean-840945019b86"
+                        target="_blank" class="project-link">
+                        Read on Medium <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </article>
+                <article class="blog-card">
+                    <h3 class="blog-title">Deploy Docker project using Github Actions</h3>
+                    <p class="blog-preview">Deploy Docker based project using github in 5 min with simple CI/CD
+                        integration...</p>
+                    <a href="https://medium.com/@sunilmore/deploy-docker-based-project-using-github-in-5-min-with-simple-ci-cd-integration-6cd5a8430e83"
+                        target="_blank" class="project-link">
+                        Read on Medium <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </article>
+                <article class="blog-card">
+                    <h3 class="blog-title">Deploy Nodejs App with MongoDB on AWS EC2</h3>
+                    <p class="blog-preview">Complete Setup for Deploying Nodejs App with mongodb database on Amazon
+                        EC2...</p>
+                    <a href="https://medium.com/@sunilmore/complete-setup-for-deploying-nodejs-app-with-mongodb-database-on-amazon-ec2-e6eeb3b47bc0"
+                        target="_blank" class="project-link">
+                        Read on Medium <i class="fas fa-external-link-alt"></i>
+                    </a>
+                </article>
+            </div>
+        </div>
+    </section>
 
-  <!-- Footer -->
-  <footer id="contact" class="footer">
-    <div class="container footer-content">
-      <div class="footer-info">
-        <h3>Sunil More</h3>
-        <p>Building the web, one line of code at a time.</p>
-      </div>
-      <div class="footer-contact">
-        <p><i class="fas fa-envelope"></i> sunilmore690@gmail.com</p>
-        <p><i class="fas fa-phone"></i> 9890990748</p>
-        <p><i class="fas fa-map-marker-alt"></i> India</p>
-      </div>
-      <div class="footer-social">
-        <a href="https://www.linkedin.com/in/sunil-more-18961164/" target="_blank" class="social-link">
-          <i class="fab fa-linkedin-in"></i>
-        </a>
-        <a href="https://github.com/sunilmore690" target="_blank" class="social-link">
-          <i class="fab fa-github"></i>
-        </a>
-      </div>
-    </div>
-  </footer>
+    <!-- Footer -->
+    <footer id="contact" class="footer">
+        <div class="container footer-content">
+            <div class="footer-info">
+                <h3>Sunil More</h3>
+                <p>Building the web, one line of code at a time.</p>
+            </div>
+            <div class="footer-contact">
+                <p><i class="fas fa-envelope"></i> sunilmore690@gmail.com</p>
+                <p><i class="fas fa-phone"></i> 9890990748</p>
+                <p><i class="fas fa-map-marker-alt"></i> India</p>
+            </div>
+            <div class="footer-social">
+                <a href="https://www.linkedin.com/in/sunil-more-18961164/" target="_blank" class="social-link">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="https://github.com/sunilmore690" target="_blank" class="social-link">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>
