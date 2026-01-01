@@ -20,15 +20,21 @@
     <nav class="navbar">
         <div class="container nav-container">
             <a href="#" class="nav-logo">Sunil More</a>
-            <div class="nav-links">
-                <a href="#about">About</a>
-                <a href="#skills">Skills</a>
-                <a href="#projects">Projects</a>
-                <a href="#blogs">Blogs</a>
-                <a href="#contact">Contact</a>
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
-                    <i class="fas fa-moon"></i>
+
+            <div class="nav-controls">
+                <button class="menu-toggle" aria-label="Toggle Menu">
+                    <i class="fas fa-bars"></i>
                 </button>
+                <div class="nav-links">
+                    <a href="#about">About</a>
+                    <a href="#skills">Skills</a>
+                    <a href="#projects">Projects</a>
+                    <a href="#blogs">Blogs</a>
+                    <a href="#contact">Contact</a>
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
@@ -37,6 +43,31 @@
         const toggleButton = document.getElementById('theme-toggle');
         const icon = toggleButton.querySelector('i');
         const html = document.documentElement;
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        // Mobile Menu Toggle
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            // Toggle icon between bars and times (X)
+            const menuIcon = menuToggle.querySelector('i');
+            if (navLinks.classList.contains('active')) {
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-times');
+            } else {
+                menuIcon.classList.remove('fa-times');
+                menuIcon.classList.add('fa-bars');
+            }
+        });
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                menuToggle.querySelector('i').classList.remove('fa-times');
+                menuToggle.querySelector('i').classList.add('fa-bars');
+            });
+        });
 
         // Check for saved user preference, if any, on load
         const currentTheme = localStorage.getItem('theme') || 'light';

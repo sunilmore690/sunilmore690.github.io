@@ -483,7 +483,32 @@ img {
 }
 
 /* Responsive */
+.nav-controls {
+  display: flex;
+  align-items: center;
+}
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-main);
+  cursor: pointer;
+  margin-right: 1rem;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    /* Hide by default on mobile */
+  }
+
   .nav-links.active {
     display: flex;
     flex-direction: column;
@@ -499,6 +524,18 @@ img {
   .nav-links a {
     display: block;
     margin-bottom: 1rem;
+    font-size: 1.1rem;
+  }
+
+  .nav-logo {
+    font-size: 1.2rem;
+    /* Reduced from 1.5rem */
+  }
+
+  /* Make sure theme toggle is nicely positioned in mobile menu */
+  .theme-toggle {
+    margin-left: 0;
+    margin-top: 1rem;
   }
 
   .hero-content {
