@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TextForge — Local AI writing assistant for your browser</title>
+<meta name="description" content="A Chrome extension that brings Grammarly-style writing help to any text field on the web, powered entirely by AI running on your own machine. No subscriptions. No data leaves your computer.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,700;9..144,900&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --ink-2: #1a1815;
+    --paper: #fbf8f3;
+    --paper-2: #f3ede1;
+    --line: #2a2620;
+    --line-soft: rgba(10,10,10,0.12);
+    --ember: #ff6a1f;
+    --ember-2: #d94a06;
+    --rose: #d11a5b;
+    --gold: #c9a14a;
+    --muted: #6b6358;
+    --grain: rgba(0,0,0,0.025);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.55;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    opacity: 0.4;
+    mix-blend-mode: multiply;
+  }
+
+  /* ---------- Nav ---------- */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.25rem 2rem;
+    background: rgba(251, 248, 243, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line-soft);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .logo-mark {
+    width: 30px;
+    height: 30px;
+    background: var(--ink);
+    color: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    border-radius: 3px;
+    position: relative;
+  }
+  .logo-mark::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border: 1px solid var(--ember);
+    border-radius: 4px;
+    pointer-events: none;
+  }
+  .logo-name {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: -0.01em;
+  }
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+  .nav-links a {
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  .nav-links a:hover { opacity: 1; }
+  .nav-cta {
+    background: var(--ink);
+    color: var(--paper) !important;
+    padding: 0.5rem 1rem;
+    border-radius: 2px;
+    opacity: 1 !important;
+    transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--ember-2); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    padding: 8rem 2rem 5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ember-2);
+    margin-bottom: 2rem;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--ember);
+    border-radius: 999px;
+    background: rgba(255, 106, 31, 0.05);
+  }
+  .badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--ember);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(255, 106, 31, 0.6); }
+    50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(255, 106, 31, 0); }
+  }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    max-width: 900px;
+  }
+  h1 .ital {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--ember-2);
+  }
+  h1 .strike {
+    position: relative;
+    color: var(--muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--rose);
+    text-decoration-thickness: 4px;
+  }
+  .hero-sub {
+    font-size: 1.25rem;
+    color: var(--muted);
+    max-width: 620px;
+    margin-bottom: 2.5rem;
+    line-height: 1.5;
+  }
+  .hero-sub strong { color: var(--ink); font-weight: 500; }
+  .cta-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 1rem 1.75rem;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    border-radius: 2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    transition: all 0.2s;
+    border: 2px solid var(--ink);
+  }
+  .btn-primary:hover {
+    background: var(--ember-2);
+    border-color: var(--ember-2);
+    transform: translateY(-2px);
+  }
+  .btn-secondary {
+    color: var(--ink);
+    padding: 1rem 1.75rem;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    border-radius: 2px;
+    border: 2px solid var(--ink);
+    transition: all 0.2s;
+    background: transparent;
+  }
+  .btn-secondary:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .meta-row {
+    display: flex;
+    gap: 2rem;
+    margin-top: 3rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--muted);
+    flex-wrap: wrap;
+  }
+  .meta-row span { display: flex; align-items: center; gap: 0.4rem; }
+  .meta-row .dot { width: 6px; height: 6px; background: var(--ember); border-radius: 50%; }
+
+  /* ---------- Demo terminal visual ---------- */
+  .demo {
+    margin-top: 5rem;
+    max-width: 920px;
+    margin-left: auto;
+    margin-right: auto;
+    background: var(--ink);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.25), 0 0 0 1px var(--line);
+    position: relative;
+  }
+  .demo-bar {
+    background: var(--ink-2);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid #2a2823;
+  }
+  .demo-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #3a3530;
+  }
+  .demo-dot:nth-child(1) { background: #ff5f57; }
+  .demo-dot:nth-child(2) { background: #febc2e; }
+  .demo-dot:nth-child(3) { background: #28c840; }
+  .demo-title {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: #6b6358;
+  }
+  .demo-content {
+    padding: 2rem;
+    color: #e8e2d4;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    min-height: 280px;
+  }
+  .demo-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #6b6358;
+    margin-bottom: 0.5rem;
+  }
+  .demo-original {
+    color: #8a8478;
+    margin-bottom: 1.5rem;
+    padding-left: 1rem;
+    border-left: 2px solid #3a3530;
+  }
+  .demo-arrow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    color: var(--ember);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+  }
+  .demo-arrow svg { width: 14px; height: 14px; }
+  .demo-result {
+    color: #fbf8f3;
+    padding-left: 1rem;
+    border-left: 2px solid var(--ember);
+    font-size: 1.05rem;
+  }
+  .typing-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    background: var(--ember);
+    vertical-align: text-bottom;
+    margin-left: 2px;
+    animation: blink 1s steps(2) infinite;
+  }
+  @keyframes blink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
+
+  /* ---------- Section ---------- */
+  section {
+    padding: 6rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ember-2);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .section-label::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--ember);
+  }
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: clamp(2rem, 4.5vw, 3.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin-bottom: 1.5rem;
+    max-width: 800px;
+  }
+  h2 em { color: var(--ember-2); font-style: italic; }
+  .section-intro {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 620px;
+    margin-bottom: 3.5rem;
+  }
+
+  /* ---------- Why grid ---------- */
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+  }
+  .why-cell {
+    padding: 2.5rem 2rem;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    transition: background 0.2s;
+  }
+  .why-cell:hover { background: var(--paper-2); }
+  .why-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--ember-2);
+    margin-bottom: 1.5rem;
+  }
+  .why-cell h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  .why-cell p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  /* ---------- Actions list ---------- */
+  .actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 2.5rem;
+  }
+  .action-card {
+    background: var(--paper-2);
+    padding: 1.5rem 1.75rem;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+  .action-card:hover {
+    border-color: var(--ember);
+    transform: translateX(4px);
+  }
+  .action-icon {
+    font-size: 1.6rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .action-name {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    margin-bottom: 0.25rem;
+  }
+  .action-desc {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  /* ---------- How it works ---------- */
+  .how-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+  .step {
+    position: relative;
+  }
+  .step-num {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 4rem;
+    line-height: 1;
+    color: var(--ember);
+    opacity: 0.9;
+    margin-bottom: 1rem;
+  }
+  .step h4 {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+  .step p {
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  .step code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    background: var(--ink);
+    color: var(--ember);
+    padding: 0.15rem 0.4rem;
+    border-radius: 2px;
+  }
+
+  /* ---------- Models section (dark) ---------- */
+  .models-section {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 6rem 2rem;
+    margin-top: 6rem;
+    position: relative;
+    z-index: 2;
+  }
+  .models-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .models-section .section-label { color: var(--ember); }
+  .models-section h2 em { color: var(--ember); }
+  .models-section .section-intro { color: #a8a298; }
+  .model-table {
+    margin-top: 2rem;
+    border: 1px solid #2a2823;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .model-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 2fr;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #2a2823;
+    align-items: center;
+    gap: 1rem;
+  }
+  .model-row:last-child { border-bottom: none; }
+  .model-row.header {
+    background: #1a1815;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #6b6358;
+  }
+  .model-row.header > div { color: #6b6358; }
+  .model-ram {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.05rem;
+  }
+  .model-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88rem;
+    color: var(--ember);
+  }
+  .model-note { color: #a8a298; font-size: 0.92rem; }
+
+  /* ---------- Privacy callout ---------- */
+  .privacy {
+    margin: 6rem auto;
+    max-width: 900px;
+    padding: 4rem 3rem;
+    background: var(--paper-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+  .privacy::before {
+    content: '"';
+    position: absolute;
+    top: -1rem;
+    left: 2rem;
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-size: 8rem;
+    color: var(--ember);
+    line-height: 1;
+  }
+  .privacy h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: clamp(1.6rem, 3vw, 2.25rem);
+    line-height: 1.3;
+    max-width: 700px;
+    margin: 0 auto 1.5rem;
+  }
+  .privacy h3 strong {
+    font-style: normal;
+    font-weight: 700;
+    background: linear-gradient(180deg, transparent 60%, rgba(255,106,31,0.3) 60%);
+    padding: 0 0.2em;
+  }
+  .privacy-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* ---------- Footer CTA ---------- */
+  .final-cta {
+    padding: 8rem 2rem;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+  .final-cta h2 {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2rem;
+  }
+  .final-cta .cta-row { justify-content: center; }
+
+  /* ---------- Footer ---------- */
+  footer {
+    border-top: 1px solid var(--line-soft);
+    padding: 3rem 2rem;
+    background: var(--paper-2);
+    position: relative;
+    z-index: 2;
+  }
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .footer-inner a {
+    color: var(--ink);
+    text-decoration: none;
+    opacity: 0.7;
+    margin-left: 1.5rem;
+  }
+  .footer-inner a:hover { opacity: 1; color: var(--ember-2); }
+
+  /* ---------- Reveal animations ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ---------- Mobile ---------- */
+  @media (max-width: 800px) {
+    nav { padding: 1rem 1.25rem; }
+    .nav-links { gap: 1rem; }
+    .nav-links a:not(.nav-cta) { display: none; }
+    .hero { padding: 6rem 1.25rem 3rem; }
+    section { padding: 4rem 1.25rem; }
+    .why-grid { grid-template-columns: 1fr; }
+    .actions-grid { grid-template-columns: 1fr; }
+    .how-steps { grid-template-columns: 1fr; gap: 2.5rem; }
+    .model-row { grid-template-columns: 1fr; gap: 0.4rem; padding: 1rem; }
+    .model-row.header { display: none; }
+    .privacy { padding: 3rem 1.5rem; margin: 4rem 1.25rem; }
+    .privacy::before { font-size: 5rem; left: 1rem; top: -0.5rem; }
+    .final-cta { padding: 5rem 1.25rem; }
+    .demo-content { padding: 1.5rem; font-size: 0.88rem; }
+    .meta-row { gap: 1rem; font-size: 0.72rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-mark">T</div>
+    <div class="logo-name">TextForge</div>
+  </a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#how">How it works</a>
+    <a href="#models">Models</a>
+    <a href="#install" class="nav-cta">Install</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="badge">v1.0 · Open beta</div>
+  <h1>
+    Writing help that <span class="strike">leaves</span> <span class="ital">stays on</span> your machine.
+  </h1>
+  <p class="hero-sub">
+    TextForge is a Chrome extension that brings <strong>Grammarly-style rewriting, summarizing, and tone-shifting</strong> to any text field on the web — powered entirely by an AI model running locally on your computer. No subscriptions. No accounts. Your text never leaves your machine.
+  </p>
+  <div class="cta-row">
+    <a href="#install" class="btn-primary">
+      Add to Chrome
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+    </a>
+    <a href="#how" class="btn-secondary">See how it works</a>
+  </div>
+  <div class="meta-row">
+    <span><span class="dot"></span>100% LOCAL</span>
+    <span><span class="dot"></span>NO SUBSCRIPTION</span>
+    <span><span class="dot"></span>OLLAMA &amp; LM STUDIO</span>
+    <span><span class="dot"></span>OPEN SOURCE</span>
+  </div>
+
+  <!-- Animated demo -->
+  <div class="demo reveal">
+    <div class="demo-bar">
+      <div class="demo-dot"></div>
+      <div class="demo-dot"></div>
+      <div class="demo-dot"></div>
+      <div class="demo-title">gmail.com — compose</div>
+    </div>
+    <div class="demo-content">
+      <div class="demo-label">Original draft</div>
+      <div class="demo-original" id="demo-original">hey just wanted to check in about the budget approval thing we talked about last week, any update? need to know asap</div>
+      <div class="demo-arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        FORMALIZE · llama3.2:3b
+      </div>
+      <div class="demo-label">Suggested rewrite</div>
+      <div class="demo-result" id="demo-result"><span class="typing-cursor"></span></div>
+    </div>
+  </div>
+</header>
+
+<section id="features">
+  <div class="section-label">Why TextForge</div>
+  <h2>The 80% of writing help you need, <em>without the monthly bill</em>.</h2>
+  <p class="section-intro">
+    Most of what we use Grammarly or QuillBot for — cleaning up emails, summarizing, adjusting tone — doesn't need a cloud GPU farm. A small model on your laptop handles it just fine. So why are we still paying for it?
+  </p>
+
+  <div class="why-grid">
+    <div class="why-cell">
+      <div class="why-num">01</div>
+      <h3>Your text, your machine</h3>
+      <p>Every request goes to <code style="font-family:'JetBrains Mono',monospace;background:rgba(0,0,0,0.06);padding:1px 4px;border-radius:2px;font-size:0.85em;">http://localhost</code> by default. Nothing is sent to any third party. Verify it yourself in the network inspector.</p>
+    </div>
+    <div class="why-cell">
+      <div class="why-num">02</div>
+      <h3>No subscriptions, no caps</h3>
+      <p>Rewrite as many emails as you want. There's no token limit, no rate ceiling, no "upgrade to Premium" wall. You already paid for your laptop.</p>
+    </div>
+    <div class="why-cell">
+      <div class="why-num">03</div>
+      <h3>Pick your own model</h3>
+      <p>TextForge auto-detects every model installed on your local AI server. Llama, Mistral, Qwen, Phi, Gemma — pick what suits your hardware and writing style.</p>
+    </div>
+    <div class="why-cell">
+      <div class="why-num">04</div>
+      <h3>Preview before replace</h3>
+      <p>Nothing touches your text without confirmation. Every rewrite opens in a preview pane where you can edit, retry, copy, or reject.</p>
+    </div>
+    <div class="why-cell">
+      <div class="why-num">05</div>
+      <h3>Works where you write</h3>
+      <p>Gmail compose, LinkedIn, X, GitHub, support forms, comment boxes — anywhere there's a textarea or rich-text editor, the icon shows up.</p>
+    </div>
+    <div class="why-cell">
+      <div class="why-num">06</div>
+      <h3>Remote-friendly</h3>
+      <p>Running Ollama on a beefier workstation or homelab box? Point the extension at any endpoint over your network — Tailscale-friendly too.</p>
+    </div>
+  </div>
+</section>
+
+<section id="how" style="background: var(--paper-2); max-width: none; padding-left: 0; padding-right: 0;">
+  <div style="max-width:1200px; margin:0 auto; padding: 0 2rem;">
+    <div class="section-label">Seven ways to rewrite</div>
+    <h2>One click. <em>Pick a flavor.</em></h2>
+    <p class="section-intro">
+      Click any text field, click the icon that appears, and choose how you want your text transformed. The model takes care of the rest.
+    </p>
+
+    <div class="actions-grid">
+      <div class="action-card">
+        <div class="action-icon">✨</div>
+        <div>
+          <div class="action-name">Humanize</div>
+          <div class="action-desc">Make AI-generated text sound natural and conversational.</div>
+        </div>
+      </div>
+      <div class="action-card">
+        <div class="action-icon">📝</div>
+        <div>
+          <div class="action-name">Summarize</div>
+          <div class="action-desc">Condense long content into clear, key-point summaries.</div>
+        </div>
+      </div>
+      <div class="action-card">
+        <div class="action-icon">👔</div>
+        <div>
+          <div class="action-name">Formalize</div>
+          <div class="action-desc">Professional, polished tone for business email.</div>
+        </div>
+      </div>
+      <div class="action-card">
+        <div class="action-icon">💬</div>
+        <div>
+          <div class="action-name">Casualize</div>
+          <div class="action-desc">Friendly, relaxed tone for everyday messages.</div>
+        </div>
+      </div>
+      <div class="action-card">
+        <div class="action-icon">✓</div>
+        <div>
+          <div class="action-name">Fix Grammar</div>
+          <div class="action-desc">Correct grammar and spelling without changing meaning.</div>
+        </div>
+      </div>
+      <div class="action-card">
+        <div class="action-icon">✂️</div>
+        <div>
+          <div class="action-name">Shorten</div>
+          <div class="action-desc">Cut the fluff. Keep the meaning. Half the words.</div>
+        </div>
+      </div>
+      <div class="action-card" style="grid-column: span 2; max-width:48%;">
+        <div class="action-icon">➕</div>
+        <div>
+          <div class="action-name">Expand</div>
+          <div class="action-desc">Add detail and clarity while keeping the original tone.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-label">How it works</div>
+  <h2>Up and running in <em>under five minutes</em>.</h2>
+
+  <div class="how-steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h4>Install Ollama</h4>
+      <p>Download <code>ollama.com</code> — free, open source, works great on Apple Silicon and Linux. Or use LM Studio.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h4>Pull a model</h4>
+      <p>Run <code>ollama pull llama3.2:3b</code> in your terminal. Pick a size that suits your RAM.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h4>Install TextForge</h4>
+      <p>Add the extension from the Chrome Web Store. It'll auto-detect your installed models.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <h4>Click and write</h4>
+      <p>The icon appears on any textarea. Click it, pick an action, preview, accept. Done.</p>
+    </div>
+  </div>
+</section>
+
+<section class="models-section" id="models">
+  <div class="models-inner">
+    <div class="section-label">Pick your model</div>
+    <h2>From a 3B on your <em>MacBook Air</em> to a 70B on your workstation.</h2>
+    <p class="section-intro">
+      TextForge auto-detects every model installed on your local server and shows them in a dropdown — with parameter size, quantization, and disk size. Match the model to your machine.
+    </p>
+
+    <div class="model-table">
+      <div class="model-row header">
+        <div>Your hardware</div>
+        <div>Recommended</div>
+        <div>What you get</div>
+      </div>
+      <div class="model-row">
+        <div class="model-ram">8 GB RAM Mac</div>
+        <div class="model-name">llama3.2:3b · qwen2.5:3b</div>
+        <div class="model-note">Fast, surprisingly capable for everyday rewrites. ~3 sec per request.</div>
+      </div>
+      <div class="model-row">
+        <div class="model-ram">16 GB RAM Mac</div>
+        <div class="model-name">mistral:7b · qwen2.5:7b</div>
+        <div class="model-note">Noticeably better nuance and tone control. Great middle ground.</div>
+      </div>
+      <div class="model-row">
+        <div class="model-ram">32 GB+ / GPU</div>
+        <div class="model-name">llama3.1:8b · gemma2:9b</div>
+        <div class="model-note">Higher quality output. Best for nuanced professional writing.</div>
+      </div>
+      <div class="model-row">
+        <div class="model-ram">Remote box</div>
+        <div class="model-name">llama3.1:70b-q4</div>
+        <div class="model-note">Point TextForge at any endpoint. Tailscale and LAN supported.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="privacy">
+  <h3>
+    Your draft email, your support reply, your half-finished tweet —
+    <strong>none of it ever leaves your machine.</strong>
+    No telemetry. No accounts. No third parties.
+  </h3>
+  <div class="privacy-meta">— Privacy by architecture, not by promise</div>
+</div>
+
+<section class="final-cta" id="install">
+  <div class="section-label" style="justify-content:center;">Ready to ditch the subscription?</div>
+  <h2>Give your local AI a job.</h2>
+  <div class="cta-row">
+    <a href="#" class="btn-primary">
+      Add to Chrome — free
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+    </a>
+    <a href="#" class="btn-secondary">View on GitHub</a>
+  </div>
+  <p style="margin-top:2rem; font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--muted);">
+    REQUIRES OLLAMA OR LM STUDIO INSTALLED LOCALLY
+  </p>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div>© 2026 TextForge · Made for people who write a lot</div>
+    <div>
+      <a href="#">GitHub</a>
+      <a href="#">Privacy</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Type-on effect for demo
+  const resultText = "Hi — just following up on the budget approval we discussed last week. Could you share an update when you have a moment? I'd appreciate it as soon as possible.";
+  const target = document.getElementById('demo-result');
+  let i = 0;
+  let typed = '';
+
+  function startTyping() {
+    const interval = setInterval(() => {
+      if (i >= resultText.length) {
+        clearInterval(interval);
+        // Restart after pause
+        setTimeout(() => {
+          typed = '';
+          i = 0;
+          target.innerHTML = '<span class="typing-cursor"></span>';
+          setTimeout(startTyping, 800);
+        }, 4000);
+        return;
+      }
+      typed += resultText[i];
+      target.innerHTML = typed + '<span class="typing-cursor"></span>';
+      i++;
+    }, 28);
+  }
+  // Start when demo enters viewport
+  const demo = document.querySelector('.demo');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        if (e.target === demo && i === 0) {
+          setTimeout(startTyping, 600);
+        }
+      }
+    });
+  }, { threshold: 0.2 });
+
+  document.querySelectorAll('.reveal, .demo, section').forEach(el => {
+    el.classList.add('reveal');
+    io.observe(el);
+  });
+</script>
+
+</body>
+</html>
