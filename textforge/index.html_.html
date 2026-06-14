@@ -554,258 +554,6 @@
       color: var(--muted);
     }
 
-    /* ---------- Providers section ---------- */
-    .providers-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin-top: 2.5rem;
-    }
-
-    .provider-card {
-      background: var(--paper);
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      padding: 2rem 1.75rem;
-      transition: transform 0.2s, box-shadow 0.2s;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .provider-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    }
-
-    .provider-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .provider-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      background: var(--paper-2);
-      border: 1px solid var(--line-soft);
-    }
-
-    .provider-icon.ollama {
-      background: linear-gradient(135deg, #fff4e6, #ffe0c2);
-    }
-
-    .provider-icon.lmstudio {
-      background: linear-gradient(135deg, #e8efff, #d6e1ff);
-    }
-
-    .provider-name {
-      font-family: 'Fraunces', serif;
-      font-weight: 700;
-      font-size: 1.6rem;
-      letter-spacing: -0.01em;
-      line-height: 1;
-    }
-
-    .provider-tag {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      margin-top: 0.4rem;
-    }
-
-    .provider-desc {
-      color: var(--ink);
-      font-size: 0.95rem;
-      line-height: 1.6;
-      margin-bottom: 1.5rem;
-    }
-
-    .provider-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
-      padding: 1rem;
-      background: var(--paper-2);
-      border-radius: 4px;
-    }
-
-    .meta-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.85rem;
-    }
-
-    .meta-key {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-    }
-
-    .meta-item code {
-      font-family: 'JetBrains Mono', monospace;
-      background: var(--ink);
-      color: var(--ember);
-      padding: 0.15rem 0.5rem;
-      border-radius: 2px;
-      font-size: 0.8rem;
-    }
-
-    .provider-code {
-      background: var(--ink);
-      border-radius: 4px;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .code-tabs {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.75rem;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .os-tabs {
-      display: flex;
-      gap: 2px;
-      background: rgba(255, 255, 255, 0.06);
-      padding: 2px;
-      border-radius: 4px;
-    }
-
-    .os-tab {
-      background: none;
-      border: none;
-      color: #8a8478;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      padding: 4px 10px;
-      border-radius: 3px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .os-tab:hover {
-      color: #e8e2d4;
-    }
-
-    .os-tab.active {
-      background: var(--ember);
-      color: #1a1815;
-      font-weight: 700;
-    }
-
-    .os-pane {
-      display: none;
-    }
-
-    .os-pane.active {
-      display: block;
-    }
-
-    .code-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--gold);
-      margin-bottom: 0.6rem;
-    }
-
-    .provider-code pre {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
-      color: #e8e2d4;
-      line-height: 1.6;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .provider-footer {
-      margin-top: auto;
-      font-size: 0.85rem;
-      color: var(--muted);
-      padding-top: 1rem;
-      border-top: 1px dashed var(--line-soft);
-    }
-
-    .provider-footer code {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
-      background: var(--paper-2);
-      padding: 0.15rem 0.4rem;
-      border-radius: 2px;
-      color: var(--ember-2);
-    }
-
-    .providers-extra {
-      margin-top: 2.5rem;
-      padding: 1.75rem 2rem;
-      background: var(--paper);
-      border: 1px dashed var(--line);
-      border-radius: 6px;
-      display: flex;
-      gap: 1.25rem;
-      align-items: flex-start;
-    }
-
-    .extra-icon {
-      flex-shrink: 0;
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: var(--ember);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Fraunces', serif;
-      font-weight: 900;
-      font-size: 1.5rem;
-    }
-
-    .extra-title {
-      font-family: 'Fraunces', serif;
-      font-weight: 700;
-      font-size: 1.2rem;
-      margin-bottom: 0.4rem;
-    }
-
-    .extra-desc {
-      color: var(--muted);
-      font-size: 0.92rem;
-      line-height: 1.6;
-    }
-
-    .extra-desc code {
-      font-family: 'JetBrains Mono', monospace;
-      background: var(--paper-2);
-      padding: 0.1rem 0.4rem;
-      border-radius: 2px;
-      font-size: 0.85em;
-      color: var(--ink);
-    }
-
-    .extra-desc strong {
-      color: var(--ink);
-      font-weight: 600;
-    }
-
     /* ---------- How it works ---------- */
     .how-steps {
       display: grid;
@@ -1077,17 +825,6 @@
         gap: 2.5rem;
       }
 
-      .providers-grid {
-        grid-template-columns: 1fr;
-        gap: 1.25rem;
-      }
-
-      .providers-extra {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 1.5rem;
-      }
-
       .model-row {
         grid-template-columns: 1fr;
         gap: 0.4rem;
@@ -1129,17 +866,15 @@
 <body>
 
   <nav>
-    <a href="https://sunilmore690.github.io/textforge/" class="logo">
+    <a href="#" class="logo">
       <div class="logo-mark">T</div>
       <div class="logo-name">TextForge</div>
     </a>
     <div class="nav-links">
       <a href="#features">Features</a>
-      <a href="#providers">Providers</a>
       <a href="#how">How it works</a>
       <a href="#models">Models</a>
-      <a href="https://chromewebstore.google.com/detail/nmnicjkbbocfmncodkdmnhfhebhmipfe" class="nav-cta"
-        target="_blank" rel="noopener">Install</a>
+      <a href="#install" class="nav-cta">Install</a>
     </div>
   </nav>
 
@@ -1154,8 +889,8 @@
       computer. No subscriptions. No accounts. Your text never leaves your machine.
     </p>
     <div class="cta-row">
-      <a href="https://chromewebstore.google.com/detail/nmnicjkbbocfmncodkdmnhfhebhmipfe" class="btn-primary"
-        target="_blank" rel="noopener">
+      <a href="https://chromewebstore.google.com/detail/nmnicjkbbocfmncodkdmnhfhebhmipfe?utm_source=item-share-cb"
+        class="btn-primary">
         Add to Chrome
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
           stroke-linecap="round" stroke-linejoin="round">
@@ -1307,98 +1042,6 @@
     </div>
   </section>
 
-  <!-- ---------- Providers section ---------- -->
-  <section id="providers">
-    <div class="section-label">Pick your provider</div>
-    <h2>Two great options. <em>Same extension.</em></h2>
-    <p class="section-intro">
-      TextForge speaks the standard OpenAI API, so it works with any local AI server that does too. Most people use one
-      of these two — pick the one that fits how you like to work.
-    </p>
-
-    <div class="providers-grid">
-      <div class="provider-card">
-        <div class="provider-header">
-          <div class="provider-icon ollama">🦙</div>
-          <div>
-            <div class="provider-name">Ollama</div>
-            <div class="provider-tag">Terminal-first · Lightweight</div>
-          </div>
-        </div>
-        <p class="provider-desc">
-          A simple CLI for running local models. One command to pull a model, one command to run. Tiny footprint,
-          blazing fast startup, great for people comfortable in the terminal.
-        </p>
-        <div class="provider-meta">
-          <div class="meta-item"><span class="meta-key">Default port</span><code>:11434</code></div>
-          <div class="meta-item"><span class="meta-key">Best for</span><span>Developers, CLI users</span></div>
-          <div class="meta-item"><span class="meta-key">Install</span><code>ollama.com</code></div>
-        </div>
-        <div class="provider-code">
-          <div class="code-tabs">
-            <div class="code-label" style="margin:0;">Quick start</div>
-            <div class="os-tabs" role="tablist">
-              <button class="os-tab active" data-os="mac" role="tab">macOS</button>
-              <button class="os-tab" data-os="win" role="tab">Windows</button>
-              <button class="os-tab" data-os="linux" role="tab">Linux</button>
-            </div>
-          </div>
-          <pre class="os-pane active" data-os="mac">ollama pull llama3.2:3b
-launchctl setenv OLLAMA_ORIGINS "*"
-# then quit & reopen Ollama</pre>
-          <pre class="os-pane" data-os="win">ollama pull llama3.2:3b
-setx OLLAMA_ORIGINS "*"
-:: then quit & reopen Ollama from the tray</pre>
-          <pre class="os-pane" data-os="linux">ollama pull llama3.2:3b
-# add to ~/.bashrc or systemd service:
-export OLLAMA_ORIGINS="*"
-systemctl restart ollama   # if running as a service</pre>
-        </div>
-        <div class="provider-footer">In TextForge → endpoint: <code>http://localhost:11434</code></div>
-      </div>
-
-      <div class="provider-card">
-        <div class="provider-header">
-          <div class="provider-icon lmstudio">🖥️</div>
-          <div>
-            <div class="provider-name">LM Studio</div>
-            <div class="provider-tag">GUI-first · Discover &amp; chat</div>
-          </div>
-        </div>
-        <p class="provider-desc">
-          A full desktop app to discover, download, and chat with local models. Built-in model browser, a chat
-          playground, and a local server you can start with one click. Great if you prefer a visual interface.
-        </p>
-        <div class="provider-meta">
-          <div class="meta-item"><span class="meta-key">Default port</span><code>:1234</code></div>
-          <div class="meta-item"><span class="meta-key">Best for</span><span>Visual workflows, beginners</span></div>
-          <div class="meta-item"><span class="meta-key">Install</span><code>lmstudio.ai</code></div>
-        </div>
-        <div class="provider-code">
-          <div class="code-label">Quick start</div>
-          <pre>1. Open LM Studio
-2. Search & download a model
-3. Developer tab → Start Server
-   (enable CORS)</pre>
-        </div>
-        <div class="provider-footer">In TextForge → endpoint: <code>http://localhost:1234</code></div>
-      </div>
-    </div>
-
-    <div class="providers-extra">
-      <div class="extra-icon">+</div>
-      <div>
-        <div class="extra-title">Plus anything else OpenAI-compatible</div>
-        <div class="extra-desc">
-          TextForge talks the standard <code>/v1/chat/completions</code> API, so it also works with
-          <strong>llama.cpp</strong>, <strong>Jan</strong>, <strong>vLLM</strong>, <strong>LocalAI</strong>,
-          <strong>text-generation-webui</strong>, and other inference servers. Same extension, just point it at the
-          endpoint.
-        </div>
-      </div>
-    </div>
-  </section>
-
   <section>
     <div class="section-label">How it works</div>
     <h2>Up and running in <em>under five minutes</em>.</h2>
@@ -1406,19 +1049,19 @@ systemctl restart ollama   # if running as a service</pre>
     <div class="how-steps">
       <div class="step">
         <div class="step-num">1</div>
-        <h4>Install a provider</h4>
-        <p>Pick <code>Ollama</code> (CLI-first, lightweight) or <code>LM Studio</code> (GUI). Either works — both free
-          and open source.</p>
+        <h4>Install Ollama</h4>
+        <p>Download <code>ollama.com</code> — free, open source, works great on Apple Silicon and Linux. Or use LM
+          Studio.</p>
       </div>
       <div class="step">
         <div class="step-num">2</div>
-        <h4>Load a model</h4>
-        <p>Ollama: <code>ollama pull llama3.2:3b</code>. LM Studio: search & download from the in-app catalog.</p>
+        <h4>Pull a model</h4>
+        <p>Run <code>ollama pull llama3.2:3b</code> in your terminal. Pick a size that suits your RAM.</p>
       </div>
       <div class="step">
         <div class="step-num">3</div>
         <h4>Install TextForge</h4>
-        <p>Load the extension into Chrome. It auto-detects your installed models from whichever provider you chose.</p>
+        <p>Add the extension from the Chrome Web Store. It'll auto-detect your installed models.</p>
       </div>
       <div class="step">
         <div class="step-num">4</div>
@@ -1480,8 +1123,8 @@ systemctl restart ollama   # if running as a service</pre>
     <div class="section-label" style="justify-content:center;">Ready to ditch the subscription?</div>
     <h2>Give your local AI a job.</h2>
     <div class="cta-row">
-      <a href="https://chromewebstore.google.com/detail/nmnicjkbbocfmncodkdmnhfhebhmipfe" class="btn-primary"
-        target="_blank" rel="noopener">
+      <a href="https://chromewebstore.google.com/detail/nmnicjkbbocfmncodkdmnhfhebhmipfe?utm_source=item-share-cb"
+        class="btn-primary">
         Add to Chrome — free
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
           stroke-linecap="round" stroke-linejoin="round">
@@ -1499,47 +1142,14 @@ systemctl restart ollama   # if running as a service</pre>
     <div class="footer-inner">
       <div>© 2026 TextForge · Made for people who write a lot</div>
       <div>
-        <a href="https://github.com/sunilmore690/textforge">GitHub</a>
-        <a href="https://github.com/sunilmore690/textforge#privacy">Privacy</a>
-        <a href="https://github.com/sunilmore690/textforge/issues">Support</a>
+        <a href="#">GitHub</a>
+        <a href="#">Privacy</a>
+        <a href="#">Contact</a>
       </div>
     </div>
   </footer>
 
   <script>
-    // OS tab switcher
-    document.querySelectorAll('.os-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        const os = tab.dataset.os;
-        const tabContainer = tab.closest('.provider-code');
-        tabContainer.querySelectorAll('.os-tab').forEach(t => t.classList.toggle('active', t === tab));
-        tabContainer.querySelectorAll('.os-pane').forEach(p => p.classList.toggle('active', p.dataset.os === os));
-      });
-    });
-
-    // Auto-detect visitor's OS and pre-select the matching tab.
-    // Prefer the modern userAgentData API, fall back to userAgent string.
-    (function autoSelectOS() {
-      let detected = null;
-      const uaData = navigator.userAgentData;
-      if (uaData && uaData.platform) {
-        const p = uaData.platform.toLowerCase();
-        if (p.includes('win')) detected = 'win';
-        else if (p.includes('mac')) detected = 'mac';
-        else if (p.includes('linux')) detected = 'linux';
-      }
-      if (!detected) {
-        const ua = (navigator.userAgent || '').toLowerCase();
-        if (ua.includes('win')) detected = 'win';
-        else if (ua.includes('mac')) detected = 'mac';
-        else if (ua.includes('linux') || ua.includes('x11')) detected = 'linux';
-      }
-      if (detected && detected !== 'mac') {
-        // Default is already mac; only switch if we detected something else
-        document.querySelectorAll('.provider-code .os-tab[data-os="' + detected + '"]').forEach(t => t.click());
-      }
-    })();
-
     // Type-on effect for demo
     const resultText = "Hi — just following up on the budget approval we discussed last week. Could you share an update when you have a moment? I'd appreciate it as soon as possible.";
     const target = document.getElementById('demo-result');
