@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Snippet Vault</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" />
+<style>
+:root{
+  --bg:#EDEFF4; --panel:#FFFFFF; --ink:#15171D; --muted:#69707E;
+  --line:#E2E5EC; --accent:#4338CA; --accent-2:#6366F1; --accent-soft:#ECECFE;
+  --code-bg:#171A24; --code-line:#272C3A; --danger:#B42318;
+  --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,"JetBrains Mono","SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:var(--sans);color:var(--ink);background:var(--bg);font-size:14px;
+  line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh}
+button{font-family:inherit;cursor:pointer}
+.wrap{max-width:1100px;margin:0 auto;padding:28px 22px 80px}
+
+.head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.brand{display:flex;align-items:baseline;gap:10px}
+.brand h1{font-size:21px;font-weight:680;letter-spacing:-.02em;margin:0}
+.brand .glyph{font-family:var(--mono);color:var(--accent);font-weight:700;font-size:21px}
+.brand .sub{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
+.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+.search{position:relative}
+.search input{width:240px;max-width:46vw;padding:9px 12px 9px 32px;border:1px solid var(--line);
+  border-radius:9px;background:var(--panel);font-family:var(--sans);font-size:13px;color:var(--ink);outline:none}
+.search input:focus{border-color:var(--accent-2);box-shadow:0 0 0 3px var(--accent-soft)}
+.search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted)}
+
+.btn{border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:9px 13px;border-radius:9px;
+  font-size:13px;font-weight:560;display:inline-flex;align-items:center;gap:6px;transition:.12s}
+.btn:hover{border-color:#cfd3dd;background:#fbfbfd}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{background:#3a32b0}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--muted);padding:8px}
+.btn.ghost:hover{color:var(--ink);background:#e6e9f0}
+
+.body{display:block}
+
+/* Tag filter dropdown */
+.filter-wrap{position:relative}
+.filter-btn.active{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.filter-badge{font-family:var(--mono);font-size:11px;background:var(--accent);color:#fff;border-radius:999px;padding:0 6px;line-height:17px;margin-left:3px}
+.chev{transition:transform .15s}
+.filter-wrap.open .chev{transform:rotate(180deg)}
+.filter-menu{position:absolute;right:0;top:calc(100% + 6px);width:248px;max-height:340px;overflow:auto;
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 16px 40px rgba(20,22,40,.16);padding:6px;z-index:40}
+.fm-head{display:flex;justify-content:space-between;align-items:center;padding:6px 8px 8px}
+.fm-title{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.fm-clear{font-size:12px;color:var(--accent);background:none;border:none;cursor:pointer}
+.filter-item{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:8px;cursor:pointer;width:100%;border:none;background:none;text-align:left}
+.filter-item:hover{background:#f4f5f8}
+.filter-item .box{width:16px;height:16px;border:1.5px solid #c3c8d4;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff}
+.filter-item.on .box{background:var(--accent);border-color:var(--accent)}
+.filter-item .box svg{opacity:0}
+.filter-item.on .box svg{opacity:1}
+.filter-item .nm{flex:1;min-width:0;font-family:var(--mono);font-size:12px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.filter-item .ct{color:var(--muted);font-size:11px;font-family:var(--mono)}
+.fm-empty{padding:14px 10px;color:var(--muted);font-size:12px;text-align:center;line-height:1.5}
+
+.list{display:flex;flex-direction:column;gap:16px;min-width:0}
+.count{font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:-2px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.card-top{padding:15px 16px 12px;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.card-title{font-size:15px;font-weight:640;margin:0 0 3px;letter-spacing:-.01em}
+.card-desc{font-size:13px;color:var(--muted);margin:0}
+.card-acts{display:flex;gap:2px;flex-shrink:0}
+
+.code{background:var(--code-bg);margin:0 12px;border-radius:10px;overflow:hidden}
+.code-bar{display:flex;align-items:center;justify-content:space-between;padding:7px 10px 7px 12px;border-bottom:1px solid var(--code-line)}
+.lang{font-family:var(--mono);font-size:11px;color:#9aa3bd;letter-spacing:.04em;display:inline-flex;align-items:center}
+.lang .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px}
+.copy{font-family:var(--mono);font-size:11px;color:#c3c8da;background:#23283a;border:1px solid #313850;
+  padding:4px 9px;border-radius:6px;display:inline-flex;gap:5px;align-items:center;transition:.12s}
+.copy:hover{background:#2c3247;color:#fff}
+.copy.done{background:#15351f;border-color:#1f4d2c;color:#7fe0a0}
+
+/* Prism overrides — keep highlighting, drop the theme's own panel bg */
+.code pre[class*="language-"]{background:transparent;margin:0;padding:13px 14px;max-height:340px;overflow:auto;border-radius:0}
+.code code[class*="language-"]{font-family:var(--mono);font-size:12.5px;line-height:1.65;text-shadow:none;white-space:pre}
+.code pre[class*="language-"]::-webkit-scrollbar{height:9px;width:9px}
+.code pre[class*="language-"]::-webkit-scrollbar-thumb{background:#3a4256;border-radius:9px}
+
+.card-tags{padding:11px 16px 14px;display:flex;flex-wrap:wrap;gap:6px}
+.ctag{font-family:var(--mono);font-size:11px;color:var(--accent);background:var(--accent-soft);padding:3px 8px;border-radius:999px;border:none;cursor:pointer}
+.ctag:hover{background:#dedefb}
+
+.empty{background:var(--panel);border:1px dashed #d2d6e0;border-radius:14px;padding:48px 28px;text-align:center}
+.empty h3{margin:0 0 6px;font-size:16px}
+.empty p{margin:0 0 18px;color:var(--muted);font-size:13px}
+.empty .btn{margin:0 auto}
+
+.scrim{position:fixed;inset:0;background:rgba(20,22,30,.42);display:flex;align-items:flex-start;justify-content:center;
+  padding:40px 18px;z-index:50;overflow:auto;backdrop-filter:blur(2px)}
+.modal{background:var(--panel);width:100%;max-width:560px;border-radius:16px;border:1px solid var(--line);
+  box-shadow:0 24px 60px rgba(20,22,40,.22);overflow:hidden}
+.modal-h{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.modal-h h3{margin:0;font-size:15px;font-weight:640}
+.form{padding:16px 18px;display:flex;flex-direction:column;gap:13px}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px}
+.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px 11px;
+  font-size:13px;color:var(--ink);background:#fff;outline:none;font-family:var(--sans)}
+.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2369707E' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;padding-right:30px}
+.field textarea.mono{font-family:var(--mono);font-size:12.5px;line-height:1.6;background:#fbfbfd;min-height:150px;resize:vertical}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent-2);box-shadow:0 0 0 3px var(--accent-soft)}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hint{font-size:11px;color:var(--muted);margin-top:4px}
+.modal-f{padding:14px 18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.del{color:var(--danger);background:none;border:none;font-size:13px;font-weight:560}
+.del:hover{text-decoration:underline}
+.modal-f .right{display:flex;gap:8px}
+.loading{padding:60px;text-align:center;color:var(--muted);font-family:var(--mono);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <div class="brand">
+      <span class="glyph">&lt;/&gt;</span>
+      <div><h1>Snippet Vault</h1><div class="sub" id="subtitle">loading…</div></div>
+    </div>
+    <div class="tools">
+      <div class="search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="search" placeholder="Search title, notes, code…" />
+      </div>
+      <div class="filter-wrap" id="filter-wrap">
+        <button class="btn filter-btn" id="filter-btn" data-act="toggle-filter">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6 8v5l-4 2v-7z"/></svg>
+          <span id="filter-label">Tags</span>
+          <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="filter-menu" id="filter-menu" hidden></div>
+      </div>
+      <button class="btn ghost" title="Export backup" data-act="export"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg></button>
+      <button class="btn ghost" title="Import backup" data-act="import"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9M7 14l5-5 5 5M5 3h14"/></svg></button>
+      <input id="file" type="file" accept="application/json" style="display:none" />
+      <button class="btn primary" data-act="new"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>New snippet</button>
+    </div>
+  </header>
+  <div class="body">
+    <main class="list" id="list"><div class="loading">Opening your vault…</div></main>
+  </div>
+</div>
+<div id="modal-root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script>
+(function(){
+  "use strict";
+  if (window.Prism && Prism.plugins && Prism.plugins.autoloader) {
+    Prism.plugins.autoloader.languages_path = "https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/";
+  }
+
+  var LANGS = [
+    {id:"plaintext",label:"Plain text"},
+    {id:"javascript",label:"JavaScript"},
+    {id:"typescript",label:"TypeScript"},
+    {id:"jsx",label:"JSX / React"},
+    {id:"python",label:"Python"},
+    {id:"java",label:"Java"},
+    {id:"c",label:"C"},
+    {id:"cpp",label:"C++"},
+    {id:"csharp",label:"C#"},
+    {id:"go",label:"Go"},
+    {id:"rust",label:"Rust"},
+    {id:"ruby",label:"Ruby"},
+    {id:"php",label:"PHP"},
+    {id:"swift",label:"Swift"},
+    {id:"kotlin",label:"Kotlin"},
+    {id:"sql",label:"SQL"},
+    {id:"bash",label:"Shell / Bash"},
+    {id:"json",label:"JSON"},
+    {id:"yaml",label:"YAML"},
+    {id:"markup",label:"HTML / XML"},
+    {id:"css",label:"CSS"},
+    {id:"markdown",label:"Markdown"}
+  ];
+  var LANG_COLOR = {javascript:"#e7c84b",typescript:"#3b82f6",jsx:"#38bdf8",python:"#4b8bbe",
+    java:"#e76f00",c:"#7aa3cc",cpp:"#6c97c8",csharp:"#9b59b6",go:"#29beb0",rust:"#d4773f",
+    ruby:"#cc342d",php:"#7a86b8",swift:"#f05138",kotlin:"#a97bff",sql:"#5fa8d3",bash:"#6cae6c",
+    json:"#9aa3bd",yaml:"#9aa3bd",markup:"#e3756b",css:"#3b82f6",markdown:"#9aa3bd",plaintext:"#9aa3bd"};
+  function langLabel(id){ for(var i=0;i<LANGS.length;i++) if(LANGS[i].id===id) return LANGS[i].label; return id||"code"; }
+  function prismClass(id){ return id && id!=="plaintext" ? "language-"+id : "language-none"; }
+
+  var ICON = {
+    edit:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>',
+    copy:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="10" height="10" rx="1.5"/><path d="M5 15V6a1 1 0 0 1 1-1h9"/></svg>',
+    check:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'
+  };
+
+  var state = { snippets:[], search:"", tags:new Set(), editor:null, filterOpen:false };
+
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+  function parseTags(s){ var seen={},out=[]; (s||"").split(",").forEach(function(t){
+    t=t.trim().toLowerCase(); if(t&&!seen[t]){seen[t]=1;out.push(t);} }); return out; }
+
+  // ── persistence: window.storage in-app, localStorage when saved as a local file ──
+  function loadSnippets(){
+    return new Promise(function(resolve){
+      if(window.storage){
+        window.storage.get("snippets").then(function(r){
+          try{ resolve(r&&r.value?JSON.parse(r.value):[]); }catch(e){ resolve([]); }
+        }).catch(function(){ resolve([]); });
+      } else {
+        try{ var ls=localStorage.getItem("snippets"); resolve(ls?JSON.parse(ls):[]); }
+        catch(e){ resolve([]); }
+      }
+    });
+  }
+  function saveSnippets(data){
+    var json=JSON.stringify(data);
+    if(window.storage){ window.storage.set("snippets",json).catch(function(e){console.error(e);}); }
+    else { try{ localStorage.setItem("snippets",json); }catch(e){console.error(e);} }
+  }
+  function commit(next){ state.snippets=next; saveSnippets(next); renderSubtitle(); renderFilter(); renderList(); }
+
+  function allTags(){
+    var m={}; state.snippets.forEach(function(s){ (s.tags||[]).forEach(function(t){ m[t]=(m[t]||0)+1; }); });
+    return Object.keys(m).map(function(k){return [k,m[k]];}).sort(function(a,b){ return b[1]-a[1]||a[0].localeCompare(b[0]); });
+  }
+  function filtered(){
+    var q=state.search.trim().toLowerCase(), tags=state.tags;
+    return state.snippets.filter(function(s){
+      var tagOk = tags.size===0 || (s.tags||[]).some(function(t){return tags.has(t);});
+      var hay = [s.title,s.description,s.code,(s.tags||[]).join(" "),langLabel(s.language)].join(" ").toLowerCase();
+      return tagOk && (!q || hay.indexOf(q)!==-1);
+    });
+  }
+
+  function renderSubtitle(){
+    document.getElementById("subtitle").textContent = state.snippets.length+" saved · local only";
+  }
+  function renderFilter(){
+    var tags=allTags();
+    var wrap=document.getElementById("filter-wrap");
+    var btn=document.getElementById("filter-btn");
+    var label=document.getElementById("filter-label");
+    var menu=document.getElementById("filter-menu");
+    var n=state.tags.size;
+    label.innerHTML = n>0 ? 'Tags <span class="filter-badge">'+n+'</span>' : 'Tags';
+    btn.classList.toggle("active", n>0);
+    wrap.classList.toggle("open", state.filterOpen);
+    menu.hidden = !state.filterOpen;
+    if(!state.filterOpen) return;
+    var html='<div class="fm-head"><span class="fm-title">Filter by tag</span>'
+      +(n>0?'<button class="fm-clear" data-act="clearf">Clear</button>':'')+'</div>';
+    if(tags.length===0){
+      html+='<div class="fm-empty">No tags yet. Add tags to a snippet and they\'ll show up here.</div>';
+    } else {
+      html+=tags.map(function(p){
+        var on=state.tags.has(p[0])?" on":"";
+        return '<button class="filter-item'+on+'" data-act="filter-tag" data-tag="'+esc(p[0])+'">'
+          +'<span class="box">'+ICON.check+'</span>'
+          +'<span class="nm">'+esc(p[0])+'</span>'
+          +'<span class="ct">'+p[1]+'</span></button>';
+      }).join("");
+    }
+    menu.innerHTML=html;
+  }
+  function cardHTML(s){
+    var cls=prismClass(s.language);
+    var tagsHTML=(s.tags||[]).map(function(t){
+      return '<button class="ctag" data-act="tag" data-tag="'+esc(t)+'">#'+esc(t)+'</button>'; }).join("");
+    return '<article class="card">'
+      +'<div class="card-top"><div style="min-width:0">'
+      +'<h3 class="card-title">'+esc(s.title)+'</h3>'
+      +(s.description?'<p class="card-desc">'+esc(s.description)+'</p>':'')
+      +'</div><div class="card-acts">'
+      +'<button class="btn ghost" title="Edit" data-act="edit" data-id="'+s.id+'">'+ICON.edit+'</button>'
+      +'</div></div>'
+      +'<div class="code"><div class="code-bar">'
+      +'<span class="lang"><span class="dot" style="background:'+(LANG_COLOR[s.language]||"#6366F1")+'"></span>'+esc(langLabel(s.language))+'</span>'
+      +'<button class="copy" data-act="copy" data-id="'+s.id+'">'+ICON.copy+'Copy</button>'
+      +'</div><pre class="'+cls+'"><code class="'+cls+'">'+esc(s.code)+'</code></pre></div>'
+      +(tagsHTML?'<div class="card-tags">'+tagsHTML+'</div>':'')
+      +'</article>';
+  }
+  function renderList(){
+    var el=document.getElementById("list");
+    if(state.snippets.length===0){
+      el.innerHTML='<div class="empty"><h3>Your vault is empty</h3>'
+        +'<p>Save your first reusable piece of code — a function, a config block, that one command you always forget.</p>'
+        +'<button class="btn primary" data-act="new"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add a snippet</button></div>';
+      return;
+    }
+    var rows=filtered();
+    if(rows.length===0){
+      el.innerHTML='<div class="empty"><h3>Nothing matches</h3><p>Try a different search, or clear the tag filters.</p></div>';
+      return;
+    }
+    el.innerHTML='<div class="count">'+rows.length+' of '+state.snippets.length+' shown</div>'+rows.map(cardHTML).join("");
+    if(window.Prism){ el.querySelectorAll("code[class*='language-']").forEach(function(c){ try{ Prism.highlightElement(c); }catch(e){} }); }
+  }
+
+  function optionsHTML(cur){
+    return LANGS.map(function(l){ return '<option value="'+l.id+'"'+(l.id===cur?' selected':'')+'>'+l.label+'</option>'; }).join("");
+  }
+  function openEditor(mode,s){
+    s = s || {id:uid(),title:"",description:"",code:"",language:"plaintext",tags:[],createdAt:Date.now()};
+    state.editor={mode:mode,id:s.id,createdAt:s.createdAt||Date.now()};
+    var root=document.getElementById("modal-root");
+    root.innerHTML='<div class="scrim"><div class="modal">'
+      +'<div class="modal-h"><h3>'+(mode==="new"?"New snippet":"Edit snippet")+'</h3>'
+      +'<button class="btn ghost" data-act="close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>'
+      +'<div class="form">'
+      +'<div class="field"><label>Title</label><input id="f-title" value="'+esc(s.title)+'" placeholder="e.g. Debounce function" /></div>'
+      +'<div class="field"><label>Notes <span style="font-weight:400">(optional)</span></label><input id="f-desc" value="'+esc(s.description)+'" placeholder="When or why you use this" /></div>'
+      +'<div class="field"><label>Code</label><textarea id="f-code" class="mono" spellcheck="false" placeholder="Paste your code here…">'+esc(s.code)+'</textarea></div>'
+      +'<div class="frow">'
+      +'<div class="field"><label>Language</label><select id="f-lang">'+optionsHTML(s.language||"plaintext")+'</select></div>'
+      +'<div class="field"><label>Tags</label><input id="f-tags" value="'+esc((s.tags||[]).join(", "))+'" placeholder="react, utils, api" /><div class="hint">Comma-separated</div></div>'
+      +'</div></div>'
+      +'<div class="modal-f">'
+      +(mode==="edit"?'<button class="del" data-act="delete">Delete</button>':'<span></span>')
+      +'<div class="right"><button class="btn" data-act="close">Cancel</button><button class="btn primary" data-act="save">Save snippet</button></div>'
+      +'</div></div></div>';
+    var t=document.getElementById("f-title"); if(t) t.focus();
+  }
+  function closeEditor(){ state.editor=null; document.getElementById("modal-root").innerHTML=""; }
+  function saveEditor(){
+    if(!state.editor) return;
+    var clean={
+      id:state.editor.id,
+      title:(document.getElementById("f-title").value||"").trim()||"Untitled snippet",
+      description:(document.getElementById("f-desc").value||"").trim(),
+      code:document.getElementById("f-code").value||"",
+      language:document.getElementById("f-lang").value||"plaintext",
+      tags:parseTags(document.getElementById("f-tags").value),
+      createdAt:state.editor.createdAt
+    };
+    var exists=state.snippets.some(function(s){return s.id===clean.id;});
+    commit(exists?state.snippets.map(function(s){return s.id===clean.id?clean:s;}):[clean].concat(state.snippets));
+    closeEditor();
+  }
+  function deleteCurrent(){
+    if(!state.editor) return;
+    var id=state.editor.id;
+    commit(state.snippets.filter(function(s){return s.id!==id;}));
+    closeEditor();
+  }
+
+  function copySnippet(id,btn){
+    var s=state.snippets.find(function(x){return x.id===id;}); if(!s) return;
+    function done(){ if(!btn) return; btn.classList.add("done"); btn.innerHTML=ICON.check+"Copied";
+      setTimeout(function(){ btn.classList.remove("done"); btn.innerHTML=ICON.copy+"Copy"; },1300); }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(s.code).then(done).catch(fallback);
+    } else fallback();
+    function fallback(){ var ta=document.createElement("textarea"); ta.value=s.code; document.body.appendChild(ta);
+      ta.select(); try{document.execCommand("copy");}catch(e){} document.body.removeChild(ta); done(); }
+  }
+
+  function exportJSON(){
+    var blob=new Blob([JSON.stringify(state.snippets,null,2)],{type:"application/json"});
+    var url=URL.createObjectURL(blob), a=document.createElement("a");
+    a.href=url; a.download="snippets-backup.json"; document.body.appendChild(a); a.click();
+    document.body.removeChild(a); URL.revokeObjectURL(url);
+  }
+  function importJSON(file){
+    var reader=new FileReader();
+    reader.onload=function(){
+      try{
+        var data=JSON.parse(reader.result); if(!Array.isArray(data)) throw 0;
+        var byId={}; state.snippets.forEach(function(s){byId[s.id]=s;});
+        data.forEach(function(s){ if(s&&s.id){ s.tags=s.tags||[]; byId[s.id]=s; } });
+        commit(Object.keys(byId).map(function(k){return byId[k];}));
+      }catch(e){ alert("That file isn't a valid snippets backup."); }
+    };
+    reader.readAsText(file);
+  }
+
+  // ── events ──
+  document.addEventListener("click",function(e){
+    // Close the editor only when the dark backdrop itself is clicked — not its children.
+    if(e.target.classList && e.target.classList.contains("scrim")){ closeEditor(); return; }
+    // Close the tag-filter menu when clicking anywhere outside it.
+    if(state.filterOpen && !e.target.closest(".filter-wrap")){ state.filterOpen=false; renderFilter(); }
+    var el=e.target.closest("[data-act]"); if(!el) return;
+    var act=el.getAttribute("data-act");
+    function toggleTag(t){ if(state.tags.has(t)) state.tags.delete(t); else state.tags.add(t); }
+    if(act==="new") openEditor("new");
+    else if(act==="edit") openEditor("edit",state.snippets.find(function(s){return s.id===el.getAttribute("data-id");}));
+    else if(act==="copy") copySnippet(el.getAttribute("data-id"),el);
+    else if(act==="toggle-filter"){ state.filterOpen=!state.filterOpen; renderFilter(); }
+    else if(act==="filter-tag"){ toggleTag(el.getAttribute("data-tag")); renderFilter(); renderList(); }
+    else if(act==="tag"){ toggleTag(el.getAttribute("data-tag")); renderFilter(); renderList(); }
+    else if(act==="clearf"){ state.tags.clear(); renderFilter(); renderList(); }
+    else if(act==="export") exportJSON();
+    else if(act==="import") document.getElementById("file").click();
+    else if(act==="save") saveEditor();
+    else if(act==="delete") deleteCurrent();
+    else if(act==="close") closeEditor();
+  });
+  document.getElementById("search").addEventListener("input",function(e){ state.search=e.target.value; renderList(); });
+  document.getElementById("file").addEventListener("change",function(e){ if(e.target.files[0]) importJSON(e.target.files[0]); e.target.value=""; });
+  document.addEventListener("keydown",function(e){
+    if(!state.editor) return;
+    if(e.key==="Escape") closeEditor();
+    if((e.metaKey||e.ctrlKey)&&e.key==="Enter") saveEditor();
+  });
+
+  // ── init ──
+  loadSnippets().then(function(data){ state.snippets=data; renderSubtitle(); renderFilter(); renderList(); });
+})();
+</script>
+</body>
+</html>
