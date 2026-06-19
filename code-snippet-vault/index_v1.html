@@ -123,7 +123,7 @@ button{font-family:inherit;cursor:pointer}
 .scrim{position:fixed;inset:0;background:rgba(20,22,30,.42);display:flex;align-items:flex-start;justify-content:center;
   padding:40px 18px;z-index:50;overflow:auto;backdrop-filter:blur(2px)}
 .modal{background:var(--panel);width:100%;max-width:560px;border-radius:16px;border:1px solid var(--line);
-  box-shadow:0 24px 60px rgba(20,22,40,.22);overflow:visible}
+  box-shadow:0 24px 60px rgba(20,22,40,.22);overflow:hidden}
 .modal-h{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
 .modal-h h3{margin:0;font-size:15px;font-weight:640}
 .form{padding:16px 18px;display:flex;flex-direction:column;gap:13px}
@@ -135,22 +135,6 @@ button{font-family:inherit;cursor:pointer}
 .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--accent-2);box-shadow:0 0 0 3px var(--accent-soft)}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .hint{font-size:11px;color:var(--muted);margin-top:4px}
-
-/* Tag picker (in editor) */
-.tagedit{position:relative}
-.tag-field{display:flex;flex-wrap:wrap;gap:6px;align-items:center;border:1px solid var(--line);border-radius:9px;padding:6px 8px;background:#fff;cursor:text;min-height:40px}
-.tag-field:focus-within{border-color:var(--accent-2);box-shadow:0 0 0 3px var(--accent-soft)}
-.token{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:11px;color:var(--accent);background:var(--accent-soft);padding:3px 4px 3px 8px;border-radius:999px}
-.token-x{border:none;background:none;color:var(--accent);font-size:15px;line-height:1;cursor:pointer;padding:0 3px;border-radius:50%}
-.token-x:hover{background:#d7d7fb}
-.tag-q{flex:1;min-width:90px;border:none;outline:none;font-family:var(--sans);font-size:13px;padding:3px 2px;background:transparent;color:var(--ink)}
-.tag-suggest{position:absolute;left:0;right:0;top:calc(100% + 4px);background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 14px 34px rgba(20,22,40,.16);padding:5px;z-index:60;max-height:208px;overflow:auto}
-.sg-item{display:flex;align-items:center;gap:8px;width:100%;border:none;background:none;text-align:left;padding:7px 9px;border-radius:7px;font-size:12.5px;color:var(--ink);cursor:pointer;font-family:var(--mono)}
-.sg-item:hover{background:#f4f5f8}
-.sg-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sg-ct{color:var(--muted);font-size:11px}
-.sg-item.create{color:var(--accent);font-family:var(--sans);font-weight:560}
-.sg-plus{font-weight:700;margin-right:1px}
 .modal-f{padding:14px 18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px}
 .del{color:var(--danger);background:none;border:none;font-size:13px;font-weight:560}
 .del:hover{text-decoration:underline}
@@ -371,7 +355,7 @@ button{font-family:inherit;cursor:pointer}
   function optionsHTML(cur){ return LANGS.map(function(l){ return '<option value="'+l.id+'"'+(l.id===cur?' selected':'')+'>'+l.label+'</option>'; }).join(""); }
   function openEditor(mode,s){
     s = s || {id:uid(),title:"",description:"",code:"",language:"plaintext",tags:[],createdAt:Date.now()};
-    state.editor={mode:mode,id:s.id,createdAt:s.createdAt||Date.now(),tags:(s.tags||[]).slice(),tagQuery:"",tagFocus:false};
+    state.editor={mode:mode,id:s.id,createdAt:s.createdAt||Date.now()};
     document.getElementById("modal-root").innerHTML='<div class="scrim"><div class="modal">'
       +'<div class="modal-h"><h3>'+(mode==="new"?"New snippet":"Edit snippet")+'</h3>'
       +'<button class="btn ghost" data-act="close"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>'
@@ -380,65 +364,16 @@ button{font-family:inherit;cursor:pointer}
       +'<div class="field"><label>Notes <span style="font-weight:400">(optional)</span></label><input id="f-desc" value="'+esc(s.description)+'" placeholder="When or why you use this" /></div>'
       +'<div class="field"><label>Code</label><textarea id="f-code" class="mono" spellcheck="false" placeholder="Paste your code here…">'+esc(s.code)+'</textarea></div>'
       +'<div class="frow"><div class="field"><label>Language</label><select id="f-lang">'+optionsHTML(s.language||"plaintext")+'</select></div>'
-      +'<div class="field"><label>Tags</label><div class="tagedit" id="tagedit"><div class="tag-field" id="tag-field"><span id="tag-chips"></span><input id="f-tagq" class="tag-q" autocomplete="off" placeholder="Select or type a tag…" /></div><div class="tag-suggest" id="tag-suggest" hidden></div></div><div class="hint">Pick an existing tag or type a new one, then Enter</div></div></div>'
+      +'<div class="field"><label>Tags</label><input id="f-tags" value="'+esc((s.tags||[]).join(", "))+'" placeholder="react, utils, api" /><div class="hint">Comma-separated</div></div></div>'
       +'</div>'
       +'<div class="modal-f">'+(mode==="edit"?'<button class="del" data-act="delete">Delete</button>':'<span></span>')
       +'<div class="right"><button class="btn" data-act="close">Cancel</button><button class="btn primary" data-act="save">Save snippet</button></div></div>'
       +'</div></div>';
     var t=document.getElementById("f-title"); if(t) t.focus();
-    setupTagEditor();
   }
   function closeEditor(){ state.editor=null; document.getElementById("modal-root").innerHTML=""; }
-
-  // ── tag picker ──
-  function tagNorm(t){ return (t||"").trim().toLowerCase(); }
-  function addEditorTag(t){ t=tagNorm(t); if(t && state.editor && state.editor.tags.indexOf(t)===-1) state.editor.tags.push(t); }
-  function removeEditorTag(t){ if(state.editor) state.editor.tags=state.editor.tags.filter(function(x){return x!==t;}); }
-  function renderTagChips(){
-    var host=document.getElementById("tag-chips"); if(!host||!state.editor) return;
-    host.innerHTML=state.editor.tags.map(function(t){
-      return '<span class="token">'+esc(t)+'<button type="button" class="token-x" data-tagact="untag" data-tag="'+esc(t)+'" aria-label="Remove">&times;</button></span>';
-    }).join("");
-  }
-  function renderTagSuggest(){
-    var menu=document.getElementById("tag-suggest"); if(!menu||!state.editor) return;
-    if(!state.editor.tagFocus){ menu.hidden=true; menu.innerHTML=""; return; }
-    var q=tagNorm(state.editor.tagQuery), sel=state.editor.tags, existing=allTags();
-    var matches=existing.filter(function(p){ return sel.indexOf(p[0])===-1 && (!q || p[0].indexOf(q)!==-1); });
-    var exact = q && (sel.indexOf(q)!==-1 || existing.some(function(p){return p[0]===q;}));
-    var html="";
-    matches.slice(0,8).forEach(function(p){
-      html+='<button type="button" class="sg-item" data-tagact="pick" data-tag="'+esc(p[0])+'"><span class="sg-name">'+esc(p[0])+'</span><span class="sg-ct">'+p[1]+'</span></button>';
-    });
-    if(q && !exact) html+='<button type="button" class="sg-item create" data-tagact="create" data-tag="'+esc(q)+'"><span class="sg-plus">+</span>Create &ldquo;'+esc(q)+'&rdquo;</button>';
-    if(!html){ menu.hidden=true; menu.innerHTML=""; return; }
-    menu.hidden=false; menu.innerHTML=html;
-  }
-  function setupTagEditor(){
-    var input=document.getElementById("f-tagq"), wrap=document.getElementById("tagedit");
-    if(!input||!wrap) return;
-    input.addEventListener("input",function(e){ state.editor.tagQuery=e.target.value; renderTagSuggest(); });
-    input.addEventListener("keydown",function(e){
-      if(e.key==="Enter"||e.key===","){ e.preventDefault();
-        if(input.value.trim()){ addEditorTag(input.value); input.value=""; state.editor.tagQuery=""; renderTagChips(); renderTagSuggest(); } }
-      else if(e.key==="Backspace" && input.value==="" && state.editor.tags.length){
-        state.editor.tags.pop(); renderTagChips(); renderTagSuggest(); }
-    });
-    input.addEventListener("focus",function(){ state.editor.tagFocus=true; renderTagSuggest(); });
-    input.addEventListener("blur",function(){ setTimeout(function(){ if(state.editor){ state.editor.tagFocus=false; renderTagSuggest(); } },120); });
-    wrap.addEventListener("mousedown",function(e){
-      var el=e.target.closest("[data-tagact]");
-      if(!el){ if(e.target.closest("#tag-field") && e.target!==input){ e.preventDefault(); input.focus(); } return; }
-      e.preventDefault();
-      var act=el.getAttribute("data-tagact"), tag=el.getAttribute("data-tag");
-      if(act==="untag") removeEditorTag(tag); else addEditorTag(tag);
-      input.value=""; state.editor.tagQuery=""; renderTagChips(); renderTagSuggest(); input.focus();
-    });
-    renderTagChips();
-  }
   function saveEditor(){
     if(!state.editor) return;
-    var pend=document.getElementById("f-tagq"); if(pend && pend.value.trim()) addEditorTag(pend.value);
     var isNew = !byId(state.editor.id);
     var clean={
       id:state.editor.id,
@@ -446,7 +381,7 @@ button{font-family:inherit;cursor:pointer}
       description:(document.getElementById("f-desc").value||"").trim(),
       code:document.getElementById("f-code").value||"",
       language:document.getElementById("f-lang").value||"plaintext",
-      tags:state.editor.tags.slice(),
+      tags:parseTags(document.getElementById("f-tags").value),
       createdAt:state.editor.createdAt
     };
     state.selectedId=clean.id; state.detailOpen=true;
