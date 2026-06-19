@@ -140,9 +140,9 @@ button{font-family:inherit;cursor:pointer}
 .tagedit{position:relative}
 .tag-field{display:flex;flex-wrap:wrap;gap:6px;align-items:center;border:1px solid var(--line);border-radius:9px;padding:6px 8px;background:#fff;cursor:text;min-height:40px}
 .tag-field:focus-within{border-color:var(--accent-2);box-shadow:0 0 0 3px var(--accent-soft)}
-.tagtoken{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:11px;color:var(--accent);background:var(--accent-soft);padding:3px 4px 3px 8px;border-radius:999px}
-.tagtoken-x{border:none;background:none;color:var(--accent);font-size:15px;line-height:1;cursor:pointer;padding:0 3px;border-radius:50%}
-.tagtoken-x:hover{background:#d7d7fb}
+.token{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:11px;color:var(--accent);background:var(--accent-soft);padding:3px 4px 3px 8px;border-radius:999px}
+.token-x{border:none;background:none;color:var(--accent);font-size:15px;line-height:1;cursor:pointer;padding:0 3px;border-radius:50%}
+.token-x:hover{background:#d7d7fb}
 .tag-q{flex:1;min-width:90px;border:none;outline:none;font-family:var(--sans);font-size:13px;padding:3px 2px;background:transparent;color:var(--ink)}
 .tag-suggest{position:absolute;left:0;right:0;top:calc(100% + 4px);background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 14px 34px rgba(20,22,40,.16);padding:5px;z-index:60;max-height:208px;overflow:auto}
 .sg-item{display:flex;align-items:center;gap:8px;width:100%;border:none;background:none;text-align:left;padding:7px 9px;border-radius:7px;font-size:12.5px;color:var(--ink);cursor:pointer;font-family:var(--mono)}
@@ -151,14 +151,6 @@ button{font-family:inherit;cursor:pointer}
 .sg-ct{color:var(--muted);font-size:11px}
 .sg-item.create{color:var(--accent);font-family:var(--sans);font-weight:560}
 .sg-plus{font-weight:700;margin-right:1px}
-
-/* Ace code editor (in modal) */
-.ace-host{height:240px;border:1px solid var(--line);border-radius:9px;overflow:hidden}
-.ace-host:focus-within{border-color:var(--accent-2);box-shadow:0 0 0 3px var(--accent-soft)}
-.ace-host .ace_editor{font-family:var(--mono)!important;font-size:12.5px!important;line-height:1.55!important;border-radius:9px}
-.ace-host .ace_placeholder{font-family:var(--sans)!important;color:#6b7280!important;font-size:13px!important;margin:0;padding:12px 14px}
-.ce-fallback{width:100%;height:240px;border:1px solid var(--line);border-radius:9px;padding:12px 14px;
-  font-family:var(--mono);font-size:12.5px;line-height:1.6;background:var(--code-bg);color:#e7e9f2;resize:none;outline:none}
 .modal-f{padding:14px 18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px}
 .del{color:var(--danger);background:none;border:none;font-size:13px;font-weight:560}
 .del:hover{text-decoration:underline}
@@ -219,8 +211,6 @@ button{font-family:inherit;cursor:pointer}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.44.0/ace.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.44.0/ext-language_tools.min.js"></script>
 <script>
 (function(){
   "use strict";
@@ -388,7 +378,7 @@ button{font-family:inherit;cursor:pointer}
       +'<div class="form">'
       +'<div class="field"><label>Title</label><input id="f-title" value="'+esc(s.title)+'" placeholder="e.g. Debounce function" /></div>'
       +'<div class="field"><label>Notes <span style="font-weight:400">(optional)</span></label><input id="f-desc" value="'+esc(s.description)+'" placeholder="When or why you use this" /></div>'
-      +'<div class="field"><label>Code</label><div class="ace-host" id="f-code-editor"></div></div>'
+      +'<div class="field"><label>Code</label><textarea id="f-code" class="mono" spellcheck="false" placeholder="Paste your code here…">'+esc(s.code)+'</textarea></div>'
       +'<div class="frow"><div class="field"><label>Language</label><select id="f-lang">'+optionsHTML(s.language||"plaintext")+'</select></div>'
       +'<div class="field"><label>Tags</label><div class="tagedit" id="tagedit"><div class="tag-field" id="tag-field"><span id="tag-chips"></span><input id="f-tagq" class="tag-q" autocomplete="off" placeholder="Select or type a tag…" /></div><div class="tag-suggest" id="tag-suggest" hidden></div></div><div class="hint">Pick an existing tag or type a new one, then Enter</div></div></div>'
       +'</div>'
@@ -397,9 +387,8 @@ button{font-family:inherit;cursor:pointer}
       +'</div></div>';
     var t=document.getElementById("f-title"); if(t) t.focus();
     setupTagEditor();
-    setupCodeEditor(s.code);
   }
-  function closeEditor(){ if(aceEditor){ try{aceEditor.destroy();}catch(e){} aceEditor=null; } state.editor=null; document.getElementById("modal-root").innerHTML=""; }
+  function closeEditor(){ state.editor=null; document.getElementById("modal-root").innerHTML=""; }
 
   // ── tag picker ──
   function tagNorm(t){ return (t||"").trim().toLowerCase(); }
@@ -408,7 +397,7 @@ button{font-family:inherit;cursor:pointer}
   function renderTagChips(){
     var host=document.getElementById("tag-chips"); if(!host||!state.editor) return;
     host.innerHTML=state.editor.tags.map(function(t){
-      return '<span class="tagtoken">'+esc(t)+'<button type="button" class="tagtoken-x" data-tagact="untag" data-tag="'+esc(t)+'" aria-label="Remove">&times;</button></span>';
+      return '<span class="token">'+esc(t)+'<button type="button" class="token-x" data-tagact="untag" data-tag="'+esc(t)+'" aria-label="Remove">&times;</button></span>';
     }).join("");
   }
   function renderTagSuggest(){
@@ -447,42 +436,6 @@ button{font-family:inherit;cursor:pointer}
     });
     renderTagChips();
   }
-
-  // ── code editor (Ace) ──
-  var ACE_MODE = { plaintext:"text",javascript:"javascript",typescript:"typescript",jsx:"jsx",python:"python",
-    java:"java",c:"c_cpp",cpp:"c_cpp",csharp:"csharp",go:"golang",rust:"rust",ruby:"ruby",php:"php",swift:"swift",
-    kotlin:"kotlin",sql:"sql",bash:"sh",json:"json",yaml:"yaml",markup:"html",css:"css",markdown:"markdown" };
-  function aceMode(id){ return "ace/mode/"+(ACE_MODE[id]||"text"); }
-  var aceEditor=null;
-  function getCodeValue(){
-    if(aceEditor){ try{ return aceEditor.getValue(); }catch(e){} }
-    var fb=document.getElementById("f-code-fallback"); return fb?fb.value:"";
-  }
-  function setupPlainCode(initialCode){
-    var host=document.getElementById("f-code-editor"); if(!host) return;
-    host.classList.remove("ace-host");
-    host.innerHTML='<textarea id="f-code-fallback" class="ce-fallback" spellcheck="false" placeholder="Paste your code here…"></textarea>';
-    host.querySelector("textarea").value=initialCode||"";
-  }
-  function setupCodeEditor(initialCode){
-    var host=document.getElementById("f-code-editor"), sel=document.getElementById("f-lang");
-    if(!host) return;
-    if(!window.ace){ return setupPlainCode(initialCode); }
-    try{
-      ace.config.set("basePath","https://cdnjs.cloudflare.com/ajax/libs/ace/1.44.0/");
-      aceEditor=ace.edit(host);
-      aceEditor.setTheme("ace/theme/tomorrow_night");
-      aceEditor.session.setMode(aceMode(sel?sel.value:"plaintext"));
-      aceEditor.session.setUseWorker(false);
-      aceEditor.setOptions({
-        fontSize:"12.5px",tabSize:2,useSoftTabs:true,showPrintMargin:false,
-        highlightActiveLine:true,wrap:true,enableBasicAutocompletion:true,
-        enableLiveAutocompletion:true,enableSnippets:false,placeholder:"Paste your code here…"
-      });
-      aceEditor.setValue(initialCode||"",-1);
-      if(sel) sel.addEventListener("change",function(){ aceEditor.session.setMode(aceMode(sel.value)); aceEditor.session.setUseWorker(false); });
-    }catch(e){ console.error("Ace failed, using plain editor:",e); setupPlainCode(initialCode); }
-  }
   function saveEditor(){
     if(!state.editor) return;
     var pend=document.getElementById("f-tagq"); if(pend && pend.value.trim()) addEditorTag(pend.value);
@@ -491,7 +444,7 @@ button{font-family:inherit;cursor:pointer}
       id:state.editor.id,
       title:(document.getElementById("f-title").value||"").trim()||"Untitled snippet",
       description:(document.getElementById("f-desc").value||"").trim(),
-      code:getCodeValue(),
+      code:document.getElementById("f-code").value||"",
       language:document.getElementById("f-lang").value||"plaintext",
       tags:state.editor.tags.slice(),
       createdAt:state.editor.createdAt
